@@ -1,5 +1,5 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
+## This version of our webite only works with chakra UI V2, repository website-v2 will be getting adjusted for Chakra UI V3
 ## Getting Started
 
 First, run the development server:
