@@ -4,29 +4,18 @@ import { CustomHeading } from "@/app/components/CustomHeading";
 import { ChevronLeftIcon, ChevronRightIcon, InfoIcon } from "@chakra-ui/icons";
 import {
   Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
   Box,
   Checkbox,
   HStack,
   Text,
   Stack,
   Tag,
-  TagLabel,
-  TagLeftIcon,
   Slider,
-  SliderTrack,
-  SliderFilledTrack,
-  SliderThumb,
   Grid,
   GridItem,
   CloseButton,
   Skeleton,
-  SliderMark,
   Container,
-  Hide,
   Flex,
   IconButton,
   Center,
@@ -183,6 +172,11 @@ const ForSchoolsAndPartnersCourseListing = ({
     startIndex + ITEMS_PER_PAGE
   );
 
+  const marks = [
+  { value: 0, label: "K" },
+  { value: 6, label: "6" },
+  { value: 12, label: "12" },
+  ]
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
@@ -216,7 +210,7 @@ const ForSchoolsAndPartnersCourseListing = ({
 
                 return (
                   <Box key={section}>
-                    <HStack spacing={1}>
+                    <HStack gap={1}>
                       <Text fontWeight="bold">{sectionOptions.filterName}</Text>
                       <CloseButton
                         aria-label={`Clear ${section} Filter`}
@@ -226,45 +220,42 @@ const ForSchoolsAndPartnersCourseListing = ({
                     {sectionOptions.checkbox &&
                       sectionOptions.checkbox.map((checkboxInfo) => (
                         <Box key={checkboxInfo.value}>
-                          <Checkbox
+                          <Checkbox.Root
                             value={checkboxInfo.value}
                             onChange={() =>
                               handleCheckboxChange(section, checkboxInfo.value)
                             }
-                            isChecked={(filters[section] as string[]).includes(
+                            checked={(filters[section] as string[]).includes(
                               checkboxInfo.value
                             )}
                           >
-                            {checkboxInfo.label}
-                          </Checkbox>
+                           
+                            <Checkbox.HiddenInput />
+                            <Checkbox.Control>
+                              <Checkbox.Indicator />
+                            </Checkbox.Control>
+                            <Checkbox.Label>{checkboxInfo.label}</Checkbox.Label>
+                          </Checkbox.Root>
                         </Box>
                       ))}
                     {sectionOptions.slider && (
-                      <HStack spacing={2} alignItems="center">
-                        <Slider
-                          aria-label={sectionOptions.slider.label}
-                          onChange={handleSliderChanged}
+                      <HStack gap={2} alignItems="center">
+                        <Slider.Root
+                          aria-label={[sectionOptions.slider.label]}
+                          onValueChange={(e) => handleSliderChanged}
                           min={sectionOptions.slider.min}
                           max={sectionOptions.slider.max}
                           step={sectionOptions.slider.step}
-                          defaultValue={sectionOptions.slider.defaultValue}
-                          value={sliderValue}
+                          defaultValue={[sectionOptions.slider.defaultValue]}
+                          value={[sliderValue]}
                           width={{ base: "100%", md: "60%" }}
                         >
-                          <SliderMark value={0} mt="2" fontSize="sm">
-                            K
-                          </SliderMark>
-                          <SliderMark value={6} mt="2" fontSize="sm">
-                            6
-                          </SliderMark>
-                          <SliderMark value={12} mt="2" fontSize="sm">
-                            12
-                          </SliderMark>
-                          <SliderTrack>
-                            <SliderFilledTrack bg="yellow.yellow3" />
-                          </SliderTrack>
-                          <SliderThumb boxSize={6} />
-                        </Slider>
+                          <Slider.Marks marks={marks} />
+                          <Slider.Track>
+                            <Slider.Range bg="yellow.yellow3" />
+                          </Slider.Track>
+                          <Slider.Thumb index={0} boxSize={6} />
+                        </Slider.Root>
                         <Box
                           ml={4}
                           p={2}
@@ -291,20 +282,21 @@ const ForSchoolsAndPartnersCourseListing = ({
           </GridItem>
           <GridItem>
             {/* Pagination Controls */}
-            <HStack mb={"1.5rem"} spacing={4} justifyContent={"end"}>
+            <HStack mb={"1.5rem"} gap={4} justifyContent={"end"}>
               <IconButton
-                icon={<ChevronLeftIcon color="black" boxSize={6} />}
-                isDisabled={currentPage === 1}
+                disabled={currentPage === 1}
                 onClick={() => handlePageChange(currentPage - 1)}
                 aria-label="Previous Page"
-                sx={{
+                css={{
                   backgroundColor: "transparent",
-                  _hover: {
-                    backgroundColor: "gray.200", // Change to your desired gray color
-                    transition: "background-color 0.3s ease", // Smooth transition
+                  "&:hover": {
+                    backgroundColor: "gray.200",
+                    transition: "background-color 0.3s ease",
                   },
                 }}
-              />
+              >
+                <ChevronLeftIcon color="black" boxSize={6} />
+              </IconButton>
 
               {/* Page Numbers */}
               {Array.from({ length: totalPages }, (_, index) => (
@@ -327,26 +319,27 @@ const ForSchoolsAndPartnersCourseListing = ({
               ))}
 
               <IconButton
-                icon={<ChevronRightIcon color="black" boxSize={6} />}
-                isDisabled={currentPage === totalPages}
+                disabled={currentPage === totalPages}
                 onClick={() => handlePageChange(currentPage + 1)}
                 aria-label="Next Page"
-                sx={{
+                css={{
                   backgroundColor: "transparent",
-                  _hover: {
-                    backgroundColor: "gray.200", // Change to your desired gray color
-                    transition: "background-color 0.3s ease", // Smooth transition
+                  "&:hover": {
+                    backgroundColor: "gray.200",
+                    transition: "background-color 0.3s ease",
                   },
                 }}
-              />
+              >
+                <ChevronRightIcon color="black" boxSize={6} />
+              </IconButton>
             </HStack>
-            <Accordion allowMultiple>
+            <Accordion.Root multiple>
               <Stack mb={"1.25rem"}>
                 {currentCourses.length > 0 ? (
-                  currentCourses.map((item) => (
-                    <AccordionItem key={item.course_name} borderWidth={1}>
-                      <AccordionButton p={0}>
-                        <Hide below="md">
+                  currentCourses.map((item, index) => (
+                    <Accordion.Item key={item.course_name} value={item.subject} borderWidth={1}>
+                      <Accordion.ItemTrigger p={0}>
+                        <Box hideFrom="md">
                           <Box py={4}>
                             <PrismicNextImage
                               width={"150"}
@@ -355,7 +348,7 @@ const ForSchoolsAndPartnersCourseListing = ({
                               style={{ padding: "12px" }}
                             />
                           </Box>
-                        </Hide>
+                        </Box>
                         <Stack
                           gap={"1rem"}
                           pl={{ base: 3, md: 0, lg: 0 }}
@@ -371,9 +364,11 @@ const ForSchoolsAndPartnersCourseListing = ({
                             alignItems={"start"}
                             gap={"1rem"}
                           >
-                            <Tag colorScheme="gray">
-                              <TagLeftIcon as={InfoIcon} />
-                              <TagLabel>
+                            <Tag.Root colorScheme="gray">
+                              <Tag.StartElement>
+                                <InfoIcon />
+                              </Tag.StartElement>
+                              <Tag.Label>
                                 Grades{" "}
                                 {item.maximum_grade === item.minimum_grade
                                   ? item.minimum_grade === 0
@@ -384,25 +379,29 @@ const ForSchoolsAndPartnersCourseListing = ({
                                         ? "K"
                                         : item.minimum_grade
                                     } - ${item.maximum_grade}`}
-                              </TagLabel>
-                            </Tag>
-                            <Tag colorScheme="gray">
-                              <TagLeftIcon as={InfoIcon} />
-                              <TagLabel>
+                              </Tag.Label>
+                            </Tag.Root>
+                            <Tag.Root colorScheme="gray">
+                              <Tag.StartElement>
+                                <InfoIcon/>
+                              </Tag.StartElement>
+                              <Tag.Label>
                                 {item.minimum_technology} Required
-                              </TagLabel>
-                            </Tag>
+                              </Tag.Label>
+                            </Tag.Root>
                           </Flex>
                           <PrismicRichText field={item.course_description} />
                         </Stack>
-                        <AccordionIcon />
-                      </AccordionButton>
-                      <AccordionPanel p={4}>
-                        <Box>
-                          <PrismicRichText field={item.course_syllabi} />
-                        </Box>
-                      </AccordionPanel>
-                    </AccordionItem>
+                        <Accordion.ItemIndicator />
+                      </Accordion.ItemTrigger>
+                      <Accordion.ItemContent p={4}>
+                        <Accordion.ItemBody>
+                          <Box>
+                            <PrismicRichText field={item.course_syllabi} />
+                          </Box>
+                        </Accordion.ItemBody>
+                      </Accordion.ItemContent>
+                    </Accordion.Item>
                   ))
                 ) : (
                   <Center>
@@ -410,22 +409,23 @@ const ForSchoolsAndPartnersCourseListing = ({
                   </Center>
                 )}
               </Stack>
-            </Accordion>
+            </Accordion.Root>
             {/* Pagination Controls */}
-            <HStack mb={"1.5rem"} justifyContent="end" spacing={4}>
+            <HStack mb={"1.5rem"} justifyContent="end" gap={4}>
               <IconButton
-                icon={<ChevronLeftIcon color="black" boxSize={6} />}
-                isDisabled={currentPage === 1}
+                disabled={currentPage === 1}
                 onClick={() => handlePageChange(currentPage - 1)}
                 aria-label="Previous Page"
-                sx={{
+                css={{
                   backgroundColor: "transparent",
-                  _hover: {
-                    backgroundColor: "gray.200", // Change to your desired gray color
-                    transition: "background-color 0.3s ease", // Smooth transition
+                  "&:hover": {
+                    backgroundColor: "gray.200",
+                    transition: "background-color 0.3s ease",
                   },
                 }}
-              />
+              >
+                <ChevronLeftIcon color="black" boxSize={6} />
+              </IconButton>
 
               {/* Page Numbers */}
               {Array.from({ length: totalPages }, (_, index) => (
@@ -448,18 +448,17 @@ const ForSchoolsAndPartnersCourseListing = ({
               ))}
 
               <IconButton
-                icon={<ChevronRightIcon color="black" boxSize={6} />}
-                isDisabled={currentPage === totalPages}
+                disabled={currentPage === totalPages}
                 onClick={() => handlePageChange(currentPage + 1)}
                 aria-label="Next Page"
-                sx={{
+                css={{
                   backgroundColor: "transparent",
-                  _hover: {
-                    backgroundColor: "gray.200", // Change to your desired gray color
-                    transition: "background-color 0.3s ease", // Smooth transition
+                  "&:hover": {
+                    backgroundColor: "gray.200",
+                    transition: "background-color 0.3s ease",
                   },
                 }}
-              />
+              ><ChevronRightIcon color="black" boxSize={6} /></IconButton>
             </HStack>
           </GridItem>
         </Grid>

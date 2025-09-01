@@ -1,9 +1,14 @@
-import { defineStyle, defineStyleConfig } from "@chakra-ui/react";
+import { defineRecipe } from "@chakra-ui/react";
 
-const outline = defineStyle({
-  borderWidth: 2,
-});
-
-export const buttonTheme = defineStyleConfig({
-  variants: { outline },
+export const buttonRecipe = defineRecipe({
+  variants: {
+    variant: {
+      outline: {
+        borderWidth: "2px",
+      },
+    },
+  },
+  // defaultVariants: {
+  //   variant: "solid", // same default as Chakra's Button
+  // },
 });

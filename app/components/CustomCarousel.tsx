@@ -46,19 +46,20 @@ const CustomCarousel: React.FC<ImageSliderProps> = ({ slides }) => {
         customLeftArrow={
           <IconButton
             aria-label="Previous Slide"
-            icon={<ChevronLeftIcon w={8} h={8} />}
+          
             position="absolute"
             colorScheme="white"
             color="black"
             borderRadius={"50%"}
             bg="white"
             border="1px solid grey"
-          />
+          >
+            <ChevronLeftIcon w={8} h={8} />
+          </IconButton>
         }
         customRightArrow={
           <IconButton
             aria-label="Previous Slide"
-            icon={<ChevronRightIcon w={8} h={8} />}
             position="absolute"
             right={0}
             colorScheme="white"
@@ -66,7 +67,9 @@ const CustomCarousel: React.FC<ImageSliderProps> = ({ slides }) => {
             borderRadius={"50%"}
             bg="white"
             border="1px solid grey"
-          />
+          >
+            <ChevronRightIcon w={8} h={8} />
+          </IconButton>
         }
       >
         {slides.map((slide, index) => (

@@ -10,8 +10,7 @@ import {
   Flex,
   ButtonGroup,
   Stack,
-  Avatar,
-  Divider,
+  Separator,
 } from "@chakra-ui/react";
 import { Content } from "@prismicio/client";
 import styles from "../background.module.css";
@@ -21,9 +20,6 @@ import { ContainerWrapper } from "@/app/components/ContainerWrapper";
 import { CustomHeading } from "@/app/components/CustomHeading";
 import { PrismicNextImage } from "@prismicio/next";
 
-/**
- * Component for "Testimonials" Slices.
- */
 const TestimonialWithImage = (
   slice: Content.TestimonialsSlice
 ): JSX.Element => {
@@ -51,12 +47,13 @@ const TestimonialWithImage = (
       data-slice-variation={slice.variation}
     >
       <Box className={styles.backgroundImage}>
-        <ContainerWrapper overflow={"hidden"}>
-          <CustomHeading as="h2" mb={"2.5rem"}>
+        <ContainerWrapper overflow="hidden">
+          <CustomHeading as="h2" mb="2.5rem">
             {slice.primary.title}
           </CustomHeading>
+
           <Flex
-            gap={"1.5rem"}
+            gap="1.5rem"
             transition="transform 0.3s ease-in-out"
             transform={`translateX(calc(-1 * (${currentIndex * 100}% + ${currentIndex * 1.5}rem)))`}
           >
@@ -65,37 +62,33 @@ const TestimonialWithImage = (
                 <Center>
                   <Box
                     bg="white"
-                    borderRadius={"md"}
-                    padding="1.25rem"
-                    width={{
-                      base: "100%",
-                      md: "70%",
-                    }}
+                    borderRadius="md"
+                    p="1.25rem"
+                    width={{ base: "100%", md: "70%" }}
                   >
                     <Stack gap="1.25rem">
-                      <Divider borderWidth={1} />
-                      <Text fontSize="xl" fontStyle={"italic"}>
+                      <Separator borderWidth={1} />
+                      <Text fontSize="xl" fontStyle="italic">
                         &quot;{item.description}&quot;
                       </Text>
-                      <Divider borderWidth={1} />
+                      <Separator borderWidth={1} />
 
-                      <Flex gap="1.5rem">
-                        {slice.variation == "testimonialWithImage" &&
-                        "image" in item ? (
+                      <Flex gap="1.5rem" align="center">
+                        {slice.variation === "testimonialWithImage" &&
+                        "image" in item &&
+                        item.image ? (
                           <Box
-                            borderRadius={"50%"}
-                            as={PrismicNextImage}
+                            borderRadius="50%"
                             width="100px"
                             height="100px"
-                            objectFit={"cover"}
-                            field={item.image}
-                          />
-                        ) : (
-                          <></>
-                        )}
+                            style={{ objectFit: "cover" }}                          
+                          >
+                            <PrismicNextImage field={item.image} />
+                          </Box>
+                        ) : null}
 
                         <Box>
-                          <Text fontSize="lg" fontWeight={"bold"} py="1.25rem">
+                          <Text fontSize="lg" fontWeight="bold" py="1.25rem">
                             {item.name}
                           </Text>
                           <Text>{item.user}</Text>
@@ -108,22 +101,14 @@ const TestimonialWithImage = (
             ))}
           </Flex>
 
-          {slice.primary.testimonials.length == 1 ? (
-            <></>
-          ) : (
+          {slice.primary.testimonials.length > 1 && (
             <>
               <Center pt="2.25rem">
-                <Flex
-                  width={{
-                    base: "100%",
-                    md: "70%",
-                  }}
-                  justifyContent={"end"}
-                >
-                  <ButtonGroup spacing="1.25rem">
+                <Flex width={{ base: "100%", md: "70%" }} justify="end">
+                  <ButtonGroup gap="1.25rem">
                     <IconButton
                       aria-label="left-arrow"
-                      borderRadius={"50%"}
+                      borderRadius="50%"
                       onClick={prevSlide}
                     >
                       <ArrowBackIcon />
@@ -131,22 +116,20 @@ const TestimonialWithImage = (
 
                     <IconButton
                       aria-label="right-arrow"
+                      borderRadius="50%"
                       onClick={nextSlide}
-                      borderRadius={"50%"}
-                    >
-                      <ArrowForwardIcon />
-                    </IconButton>
+                    ><ArrowForwardIcon /></IconButton>
                   </ButtonGroup>
                 </Flex>
               </Center>
-              <HStack justify="center" alignItems="center" mt={4} spacing={2}>
+              <HStack justify="center" align="center" mt={4} gap={2}>
                 {slice.primary.testimonials.map((_, index) => (
                   <Button
                     key={index}
                     size="xs"
                     onClick={() => goToSlide(index)}
                     bg={index === currentIndex ? "primary.500" : "gray.300"}
-                    borderRadius="full"
+                    borderRadius="50%"
                     _hover={{
                       bg: index === currentIndex ? "primary.500" : "gray.400",
                     }}

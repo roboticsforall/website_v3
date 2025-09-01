@@ -18,14 +18,14 @@ export function DesktopNav(navigation: GlobalNavigationDocument<string>) {
   return (
     <Flex justifyContent={"space-between"} alignItems="center">
       <Flex flex={1} justifyContent={"space-between"}>
-        <HStack spacing={"1.5rem"}>
+        <HStack gap={"1.5rem"}>
           <Link as={PrismicNextLink} href={"/"}>
             <PrismicNextImage field={navigation.data.logo} />
           </Link>
           {navigation.data.slices.map((navItem, i) =>
             navItem.variation == "default" ? (
-              <Popover trigger="hover" key={i} placement={"bottom-start"}>
-                <PopoverTrigger>
+              <Popover.Root  key={i} >
+                <Popover.Trigger>
                   <Flex
                     borderWidth={3}
                     borderColor={"transparent"}
@@ -38,18 +38,17 @@ export function DesktopNav(navigation: GlobalNavigationDocument<string>) {
                     <Text>{navItem.primary.name}</Text>
                     <TriangleDownIcon ml={1} color={"primary.900"} />
                   </Flex>
-                </PopoverTrigger>
-                <PopoverContent border="none">
+                </Popover.Trigger>
+                <Popover.Content border="none">
                   {navItem.primary.child_navigation.map((childNavItem, j) => (
                     <Link
-                      as={PrismicNextLink}
                       key={j}
                       _hover={{
                         bg: "primary.900",
-                        textColor: "white",
+                        // textColor: "white",
                       }}
-                      field={childNavItem.link}
                     >
+                      <PrismicNextLink field={childNavItem.link}>
                       <Box
                         p={4}
                         borderTopRadius={j == 0 ? "md" : "none"}
@@ -61,10 +60,11 @@ export function DesktopNav(navigation: GlobalNavigationDocument<string>) {
                       >
                         <Text>{childNavItem.name}</Text>
                       </Box>
+                      </PrismicNextLink>
                     </Link>
                   ))}
-                </PopoverContent>
-              </Popover>
+                </Popover.Content>
+              </Popover.Root>
             ) : (
               <Box
                 key={i}
@@ -89,10 +89,11 @@ export function DesktopNav(navigation: GlobalNavigationDocument<string>) {
       <Flex justifyContent="end">
         <Button
           size="lg"
-          as={PrismicNextLink}
-          field={navigation.data.donate_link}
         >
-          Donate
+          <PrismicNextLink field={navigation.data.donate_link}>
+            Donate
+          </PrismicNextLink>
+          
         </Button>
       </Flex>
     </Flex>

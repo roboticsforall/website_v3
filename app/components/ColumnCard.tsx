@@ -35,38 +35,44 @@ export interface IColumnCardProps {
 
 export const ColumnCard = (props: IColumnCardProps): JSX.Element => {
   return (
-    <Card h="100%" variant={"outline"} borderWidth={1.5}>
+    <Card.Root h="100%" variant={"outline"} borderWidth={1.5}>
       {props.has_image && (
-        <CardHeader>
-          <Box as={PrismicNextImage} borderRadius={"md"} field={props.image} />
-        </CardHeader>
+        <Card.Header>
+          <Box  borderRadius={"md"} >
+            <PrismicNextImage field={props.image} />
+          </Box>
+        </Card.Header>
       )}
-      <CardBody>
+      <Card.Body>
         <CustomHeading as="h4" mb={5}>
           {props.title}
         </CustomHeading>
         <PrismicRichText field={props.description} />
-      </CardBody>
+      </Card.Body>
       {(props.has_link || props.has_button) && (
-        <CardFooter>
-          <ButtonGroup spacing="1rem">
+        <Card.Footer>
+          <ButtonGroup gap="1rem">
             {props.has_button && (
               <Button
                 variant="solid"
-                as={PrismicNextLink}
-                field={props.button_link}
               >
-                {props.button_text}
+                <PrismicNextLink field={props.button_link}>
+                  {props.button_text}
+                </PrismicNextLink>
+                
               </Button>
             )}
             {props.has_link && (
-              <Button variant="link" as={PrismicNextLink} field={props.link}>
-                {props.link_text}
+              <Button variant="solid">
+                <PrismicNextLink field={props.link}>
+                  {props.link_text}
+                </PrismicNextLink>
+                
               </Button>
             )}
           </ButtonGroup>
-        </CardFooter>
+        </Card.Footer>
       )}
-    </Card>
+    </Card.Root>
   );
 };
