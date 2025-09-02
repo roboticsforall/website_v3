@@ -5,11 +5,8 @@ import {
   Button,
   Flex,
   HStack,
-  Link,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
   Text,
+  HoverCard,
 } from "@chakra-ui/react";
 import { GlobalNavigationDocument } from "@/prismicio-types";
 import { TriangleDownIcon } from "@chakra-ui/icons";
@@ -19,13 +16,14 @@ export function DesktopNav(navigation: GlobalNavigationDocument<string>) {
     <Flex justifyContent={"space-between"} alignItems="center">
       <Flex flex={1} justifyContent={"space-between"}>
         <HStack gap={"1.5rem"}>
-          <Link as={PrismicNextLink} href={"/"}>
+          <PrismicNextLink href={"/"}>
             <PrismicNextImage field={navigation.data.logo} />
-          </Link>
+          </PrismicNextLink>
+
           {navigation.data.slices.map((navItem, i) =>
             navItem.variation == "default" ? (
-              <Popover.Root  key={i} >
-                <Popover.Trigger>
+              <HoverCard.Root key={i}>
+                <HoverCard.Trigger>
                   <Flex
                     borderWidth={3}
                     borderColor={"transparent"}
@@ -38,33 +36,37 @@ export function DesktopNav(navigation: GlobalNavigationDocument<string>) {
                     <Text>{navItem.primary.name}</Text>
                     <TriangleDownIcon ml={1} color={"primary.900"} />
                   </Flex>
-                </Popover.Trigger>
-                <Popover.Content border="none">
-                  {navItem.primary.child_navigation.map((childNavItem, j) => (
-                    <Link
-                      key={j}
-                      _hover={{
-                        bg: "primary.900",
-                        // textColor: "white",
-                      }}
-                    >
-                      <PrismicNextLink field={childNavItem.link}>
-                      <Box
-                        p={4}
-                        borderTopRadius={j == 0 ? "md" : "none"}
-                        borderBottomRadius={
-                          j == navItem.primary.child_navigation.length - 1
-                            ? "md"
-                            : "none"
-                        }
-                      >
-                        <Text>{childNavItem.name}</Text>
-                      </Box>
+                </HoverCard.Trigger>
+
+                <HoverCard.Positioner>
+                  <HoverCard.Content border="none" padding={2}>
+                    {/* Optional arrow */}
+                    <HoverCard.Arrow>
+                      <HoverCard.ArrowTip />
+                    </HoverCard.Arrow>
+
+                    {navItem.primary.child_navigation.map((childNavItem, j) => (
+                      <PrismicNextLink key={j} field={childNavItem.link}>
+                        <Box
+                          p={4}
+                          // borderTopRadius={j === 0 ? "md" : undefined}
+                          // borderBottomRadius={
+                          //   j === navItem.primary.child_navigation.length - 1
+                          //     ? "md"
+                          //     : undefined
+                          // }
+                          _hover={{
+                            bg: "primary.900",
+                            color: "white",
+                          }}
+                        >
+                          <Text>{childNavItem.name}</Text>
+                        </Box>
                       </PrismicNextLink>
-                    </Link>
-                  ))}
-                </Popover.Content>
-              </Popover.Root>
+                    ))}
+                  </HoverCard.Content>
+                </HoverCard.Positioner>
+              </HoverCard.Root>
             ) : (
               <Box
                 key={i}
@@ -86,14 +88,12 @@ export function DesktopNav(navigation: GlobalNavigationDocument<string>) {
           )}
         </HStack>
       </Flex>
+
       <Flex justifyContent="end">
-        <Button
-          size="lg"
-        >
+        <Button size="lg">
           <PrismicNextLink field={navigation.data.donate_link}>
             Donate
           </PrismicNextLink>
-          
         </Button>
       </Flex>
     </Flex>

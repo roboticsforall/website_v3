@@ -32,9 +32,11 @@ export function Footer({ footer }: FooterProps) {
             <Stack gap={"2.5rem"}>
               <Flex align="center">
                 <Box width="51px" height="51px">
-                  <Link as={PrismicNextLink} href={"/"}>
+
+                  <PrismicNextLink href={"/"}>
                     <PrismicNextImage field={footer.data.company_logo} />
-                  </Link>
+                  </PrismicNextLink>
+                    
                 </Box>
                 <CustomHeading as="h4" ml={2}>
                   {footer.data.name}
@@ -57,11 +59,11 @@ export function Footer({ footer }: FooterProps) {
               </Box>
               <Stack direction="row" gap={"2.5rem"}>
                 {footer.data.social_links.map((item, s) => (
-                  <Link>
+                  
                     <PrismicNextLink field={item.link}>
                     <PrismicNextImage field={item.icon} />
                     </PrismicNextLink>
-                  </Link>
+                  
                 ))}
               </Stack>
             </Stack>
@@ -77,12 +79,10 @@ export function Footer({ footer }: FooterProps) {
                       </CustomHeading>
                       {navItem.primary.child_navigation.map(
                         (childNavItem, j) => (
-                          <Link
-                            key={j}
-                          >
-                            <PrismicNextLink field={childNavItem.link} />
+                          
+                            <PrismicNextLink key={j} field={childNavItem.link}>
                             {childNavItem.name}
-                          </Link>
+                            </PrismicNextLink>
                         )
                       )}
                     </Stack>

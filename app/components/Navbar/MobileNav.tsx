@@ -20,9 +20,9 @@ export function MobileNav(navigation: GlobalNavigationDocument<string>) {
     <>
       {/* Top Bar */}
       <Flex justifyContent="space-between" alignItems="center">
-        <Link as={PrismicNextLink} href={"/"}>
-          <PrismicNextImage field={navigation.data.logo} />
-        </Link>
+          <PrismicNextLink href={"/"}>
+            <PrismicNextImage field={navigation.data.logo} />
+          </PrismicNextLink>
         <IconButton
           onClick={onOpen}
           variant="ghost"
@@ -90,17 +90,17 @@ export function MobileNav(navigation: GlobalNavigationDocument<string>) {
                       <Accordion.ItemContent>
                         {navItem.primary.child_navigation.map(
                           (childNavItem, j) => (
-                            <Link
-                              key={j}
-                              onClick={onClose}
-                              textAlign="left"
-                              display="block"
-                              py={2}
-                            >
-                              <PrismicNextLink field={childNavItem.link}>
+                            // <Link
+                            //   key={j}
+                            //   onClick={onClose}
+                            //   textAlign="left"
+                            //   display="block"
+                            //   py={2}
+                            // >
+                              <PrismicNextLink key={j} style={{textAlign: "left", display: "block"}} onClick={onClose} field={childNavItem.link}>
                                 {childNavItem.name}
                               </PrismicNextLink>
-                            </Link>
+                            // </Link>
                           )
                         )}
                       </Accordion.ItemContent>
@@ -108,15 +108,15 @@ export function MobileNav(navigation: GlobalNavigationDocument<string>) {
                   ) : (
                   <Accordion.Item value={i.toString()} key={i}>
                     <Accordion.ItemTrigger>
-                      <Link
+                      {/* <Link
                         w="100%"
-                      >
+                      > */}
                         <Flex justify="space-between" alignItems="center">
                           <PrismicNextLink field={navItem.primary.link} >
                             {navItem.primary.name}
                           </PrismicNextLink>
                         </Flex>
-                      </Link>
+                      {/* </Link> */}
                     </Accordion.ItemTrigger>
                   </Accordion.Item>
                 )
