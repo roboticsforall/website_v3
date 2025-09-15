@@ -1,4 +1,3 @@
-// app/theme/recipes/button.ts
 import { defineRecipe } from "@chakra-ui/react";
 
 export const buttonRecipe = defineRecipe({
@@ -11,7 +10,6 @@ export const buttonRecipe = defineRecipe({
     "&:focus-visible": { boxShadow: "0 0 0 3px var(--chakra-colors-blue-200)" },
   },
 
-  // 👇 variant GROUPS, not top-level variants
   variants: {
     variant: {
       solid: {
@@ -45,7 +43,7 @@ export const buttonRecipe = defineRecipe({
     },
 
     size: {
-      sm: { paddingInline: "1rem", height: "2.25rem" }, // no font size changes
+      sm: { paddingInline: "1rem", height: "2.25rem" },
       md: { paddingInline: "1.5rem", height: "2.5rem" },
       lg: { paddingInline: "1.75rem", height: "3rem" },
     },
