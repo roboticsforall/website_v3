@@ -1,73 +1,64 @@
 "use client";
 import { PrismicNextImage, PrismicNextLink } from "@prismicio/next";
 import { Box, Button, Flex, IconButton, Link, Text, useDisclosure, CloseButton } from "@chakra-ui/react";
-
-// import * as Drawer from "@chakra-ui/react/drawer";
-// import * as Accordion from "@chakra-ui/react/accordion";
 import { Accordion } from "@chakra-ui/react/accordion";
-// import { Accordion } from "@chakra-ui/react/accordion";
 import { GlobalNavigationDocument } from "@/prismicio-types";
-import {
-  HamburgerIcon,
-  TriangleDownIcon,
-  TriangleUpIcon,
-} from "@chakra-ui/icons";
+import { HamburgerIcon, TriangleDownIcon } from "@chakra-ui/icons";
 import { Drawer } from "@chakra-ui/react/drawer";
+
 export function MobileNav(navigation: GlobalNavigationDocument<string>) {
-  const { open, onOpen, onClose } = useDisclosure();
+  const { open, onOpen, onClose, setOpen } = useDisclosure();
 
   return (
     <>
       {/* Top Bar */}
       <Flex justifyContent="space-between" alignItems="center">
-          <PrismicNextLink href={"/"}>
-            <PrismicNextImage field={navigation.data.logo} />
-          </PrismicNextLink>
-        <IconButton
-          onClick={onOpen}
-          variant="ghost"
-          aria-label="Open menu"
-        >
+        <PrismicNextLink href={"/"}>
+          <PrismicNextImage field={navigation.data.logo} />
+        </PrismicNextLink>
+        <IconButton onClick={onOpen} variant="ghost" aria-label="Open menu">
           <HamburgerIcon boxSize={6} />
         </IconButton>
       </Flex>
 
       {/* Drawer */}
-      <Drawer.Root open={open} onOpenChange={(isOpen) => {
-    if (!isOpen) {
-      onClose(); // only run close logic when it's closing
-    }
-  }} placement="end" size="full">
+      <Drawer.Root
+        open={open}
+        onOpenChange={(e) => setOpen(e.open)}
+        placement="end"
+        size="full"
+      >
         <Drawer.Backdrop />
         <Drawer.Positioner>
-        <Drawer.Content>
-          <Drawer.Header>
-            <Drawer.CloseTrigger asChild>
-              <CloseButton size="sm" />
-            </Drawer.CloseTrigger>
-          </Drawer.Header>
+          <Drawer.Content>
+            <Drawer.Header>
+              <Drawer.CloseTrigger asChild>
+                <CloseButton size="sm" />
+              </Drawer.CloseTrigger>
+            </Drawer.Header>
 
-          <Drawer.Body>
-            {/* Donate button */}
-            <Button
-              my={6}
-              w="full"
-              size="lg"
-              onClick={onClose}
-            >
-              <PrismicNextLink field={navigation.data.donate_link}></PrismicNextLink>
-              Donate
-            </Button>
+            <Drawer.Body>
+              {/* Donate button */}
+              <Button
+                my={6}
+                w="full"
+                size="lg"
+                onClick={onClose}
+                bg="blue.500"
+                _hover={{ bg: "blue.600" }}
+                color="white"
+                fontWeight='bold'
+              >
+                <PrismicNextLink field={navigation.data.donate_link}></PrismicNextLink>
+                Donate
+              </Button>
 
-            {/* Navigation Accordion */}
-            <Accordion.Root multiple>
-              {navigation.data.slices.map((navItem, i) =>
-                navItem.variation === "default" ? (
-              <Accordion.Item value={i.toString()} key={i}>
-                      <Accordion.ItemTrigger
-                        _expanded={{ fontWeight: "bold" }}
-                        asChild
-                      >
+              {/* Navigation Accordion */}
+              <Accordion.Root multiple>
+                {navigation.data.slices.map((navItem, i) =>
+                  navItem.variation === "default" ? (
+                    <Accordion.Item value={i.toString()} key={i}>
+                      <Accordion.ItemTrigger _open={{ fontWeight: "bold" }}>
                         <Flex
                           justify="space-between"
                           align="center"
@@ -75,60 +66,54 @@ export function MobileNav(navigation: GlobalNavigationDocument<string>) {
                           textAlign="left"
                         >
                           <Text>{navItem.primary.name}</Text>
-
-                            <TriangleDownIcon ml={1} color="primary.900" />
-
-                          {/* <Accordion.Icon
-                            as={TriangleDownIcon}
-                            _expanded={{ as: TriangleUpIcon }}
+                          {/* arrow for dropdowns only */}
+                          <Accordion.ItemIndicator
                             ml={1}
                             color="primary.900"
-                          /> */}
+                            _open={{ transform: "rotate(180deg)" }}
+                            transition="transform 0.2s ease"
+                          >
+                            <TriangleDownIcon />
+                          </Accordion.ItemIndicator>
                         </Flex>
                       </Accordion.ItemTrigger>
 
                       <Accordion.ItemContent>
-                        {navItem.primary.child_navigation.map(
-                          (childNavItem, j) => (
-                            // <Link
-                            //   key={j}
-                            //   onClick={onClose}
-                            //   textAlign="left"
-                            //   display="block"
-                            //   py={2}
-                            // >
-                              <PrismicNextLink key={j} style={{textAlign: "left", display: "block"}} onClick={onClose} field={childNavItem.link}>
-                                {childNavItem.name}
+                        {navItem.primary.child_navigation.map((childNavItem, j) => (
+                          <Box pb={4} key={j}>
+                            <Link onClick={onClose} asChild textAlign="left">
+                              <PrismicNextLink field={childNavItem.link}>
+                                <Box>
+                                  <Text>{childNavItem.name}</Text>
+                                </Box>
                               </PrismicNextLink>
-                            // </Link>
-                          )
-                        )}
+                            </Link>
+                          </Box>
+                        ))}
                       </Accordion.ItemContent>
                     </Accordion.Item>
                   ) : (
-                  <Accordion.Item value={i.toString()} key={i}>
-                    <Accordion.ItemTrigger>
-                      {/* <Link
-                        w="100%"
-                      > */}
-                        <Flex justify="space-between" alignItems="center">
-                          <PrismicNextLink field={navItem.primary.link} >
+                    <Accordion.Item value={i.toString()} key={i}>
+                      <Accordion.ItemTrigger>
+                        <Flex justify="space-between" alignItems="center" w="full">
+                          <PrismicNextLink field={navItem.primary.link}>
                             {navItem.primary.name}
                           </PrismicNextLink>
+                          {/* no arrow for single-link items like Guidestar */}
                         </Flex>
-                      {/* </Link> */}
-                    </Accordion.ItemTrigger>
-                  </Accordion.Item>
-                )
-              )}
-            </Accordion.Root>
-          </Drawer.Body>
-        </Drawer.Content>
+                      </Accordion.ItemTrigger>
+                    </Accordion.Item>
+                  )
+                )}
+              </Accordion.Root>
+            </Drawer.Body>
+          </Drawer.Content>
         </Drawer.Positioner>
       </Drawer.Root>
     </>
   );
 }
+
 // "use client";
 // import { PrismicNextImage, PrismicNextLink } from "@prismicio/next";
 // import {

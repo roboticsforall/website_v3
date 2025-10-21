@@ -4,6 +4,7 @@ import {Container} from "@chakra-ui/react";
 import _default from "@emotion/styled";
 import { containerRecipe } from "./ContainerTheme";
 import { buttonRecipe } from "./ButtonTheme";
+import { headingRecipe } from "./HeadingTheme";
 import { createSystem, defaultConfig } from "@chakra-ui/react"
 
 export const system = createSystem(defaultConfig, 
@@ -12,6 +13,7 @@ export const system = createSystem(defaultConfig,
       recipes:{
         container: containerRecipe,
         button: buttonRecipe,
+        heading: headingRecipe
       },
       tokens: {
         colors: {

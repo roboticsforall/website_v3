@@ -32,7 +32,7 @@ export const CustomHeading = ({
       );
     case "h4":
       return (
-        <Heading {...headingProps} size="md">
+        <Heading {...headingProps} size="md" textAlign="center">
           {children}
         </Heading>
       );
