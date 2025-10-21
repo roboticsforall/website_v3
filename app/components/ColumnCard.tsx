@@ -9,6 +9,7 @@ import {
   Image,
   Text,
   Box,
+  Flex,
 } from "@chakra-ui/react";
 import {
   ImageField,
@@ -38,28 +39,31 @@ export const ColumnCard = (props: IColumnCardProps): JSX.Element => {
     <Card.Root h="100%" variant={"outline"} borderWidth={1.5}>
       {props.has_image && (
         <Card.Header>
-          <Box  borderRadius={"md"} >
-            <PrismicNextImage field={props.image} />
-          </Box>
+          <Flex justify="center">
+            <Box borderRadius={"md"}>
+              <PrismicNextImage field={props.image} />
+            </Box>
+          </Flex>
         </Card.Header>
       )}
       <Card.Body>
-        <CustomHeading as="h4" mb={5}>
-          {props.title}
-        </CustomHeading>
-        <PrismicRichText field={props.description} />
+        <Flex direction="column" align="center" textAlign="center">
+          <CustomHeading as="h4" mb={5}>
+            {props.title}
+          </CustomHeading>
+          <Box mx="auto" maxW="80%">
+            <PrismicRichText field={props.description} />
+          </Box>
+        </Flex>
       </Card.Body>
       {(props.has_link || props.has_button) && (
-        <Card.Footer>
+        <Card.Footer justifyContent="center">
           <ButtonGroup gap="1rem">
             {props.has_button && (
-              <Button
-                variant="solid"
-              >
+              <Button variant="solid">
                 <PrismicNextLink field={props.button_link}>
                   {props.button_text}
                 </PrismicNextLink>
-                
               </Button>
             )}
             {props.has_link && (
@@ -67,7 +71,6 @@ export const ColumnCard = (props: IColumnCardProps): JSX.Element => {
                 <PrismicNextLink field={props.link}>
                   {props.link_text}
                 </PrismicNextLink>
-                
               </Button>
             )}
           </ButtonGroup>
