@@ -6,7 +6,6 @@ import { BackgroundColor } from "@/app/components/BackgroundColor";
 import { ContainerWrapper } from "@/app/components/ContainerWrapper";
 import { BlurBox } from "@/app/components/BlurBox";
 import { TextBlockBottomButtonGroup } from "@/app/components/TextBlockBottomButtonGroup";
-
 const Hero5050RightAligned = (slice: Content.HeroSlice): JSX.Element => {
   return (
     <BackgroundColor
@@ -19,9 +18,9 @@ const Hero5050RightAligned = (slice: Content.HeroSlice): JSX.Element => {
       <Grid
         templateColumns={{ base: "1fr", md: "1fr 1fr" }}
         templateAreas={{ base: `"image" "content"`, md: `"content image"` }}
-        alignItems={"center"}
+        alignItems="center"
       >
-        <GridItem gridArea={"content"}>
+        <GridItem gridArea="content">
           <ContainerWrapper>
             <BlurBox hasBlur={slice.primary.has_header_white_highlight}>
               <TextBlockBottomButtonGroup
@@ -31,7 +30,7 @@ const Hero5050RightAligned = (slice: Content.HeroSlice): JSX.Element => {
             </BlurBox>
           </ContainerWrapper>
         </GridItem>
-        <GridItem gridArea={"image"}>
+        <GridItem gridArea="image">
           <Box>
             {slice.variation === "hero5050RightAligned" && (
               <PrismicNextImage field={slice.primary.image} />
@@ -42,5 +41,4 @@ const Hero5050RightAligned = (slice: Content.HeroSlice): JSX.Element => {
     </BackgroundColor>
   );
 };
-
 export default Hero5050RightAligned;

@@ -15,7 +15,7 @@ export const ContainerWrapper = forwardRef<
     <Container
       {...containerProps}
       py={py}
-      size={[null, "sm", "md", "lg", "xl", "2xl"]}
+      // size={[null, "sm", "md", "lg", "xl", "2xl"]}
       ref={ref} // Forward the ref to the underlying Container
     >
       {children}

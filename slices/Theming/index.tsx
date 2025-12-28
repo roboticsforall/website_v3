@@ -2,11 +2,9 @@
 import {
   Button,
   Card,
-  CardBody,
-  CardHeader,
   Heading,
   Text,
-  Divider,
+  Separator,
   Box,
   ButtonGroup,
   CardFooter,
@@ -52,30 +50,30 @@ const Theming = ({ slice }: ThemingProps): JSX.Element => {
       </Heading>
 
       <Box position="relative" padding="10">
-        <Divider />
+        <Separator />
       </Box>
 
       <Button variant="solid">Press Me</Button>
       <Button variant="outline">Press Me</Button>
       <Button variant="ghost">Press Me</Button>
-      <Button variant="link">Press Me</Button>
-      <Button isDisabled>Press Me</Button>
-      <Button isActive>Press Me</Button>
+      {/* <Button variant="link">Press Me</Button> */}
+      <Button disabled>Press Me</Button>
+      <Button data-active>Press Me</Button>
 
       <Box position="relative" padding="10">
-        <Divider />
+        <Separator />
       </Box>
 
       <Box bg={"primary.100"}>
-        <Container py={12} size={[null, "sm", "md", "lg", "xl", "2xl"]}>
+        <Container py={12}>
           <Heading mb={5} textAlign="center" as="h2" size="2xl">
             Benefits for Students
           </Heading>
           <Flex gap={6} wrap="wrap" justifyContent={"center"}>
             {[1, 2, 3, 4].map((id) => (
               <Box key={id} width={{ md: "calc(50% - 1.5rem)" }}>
-                <Card>
-                  <CardHeader>
+                <Card.Root>
+                  <Card.Header>
                     <Image
                       src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
                       width="200"
@@ -83,8 +81,8 @@ const Theming = ({ slice }: ThemingProps): JSX.Element => {
                       style={{ objectFit: "cover" }}
                       alt="Green double couch with wooden legs"
                     />
-                  </CardHeader>
-                  <CardBody>
+                  </Card.Header>
+                  <Card.Body>
                     <Heading as="h4" size="md" mb={5}>
                       Letter from the President
                     </Heading>
@@ -94,16 +92,16 @@ const Theming = ({ slice }: ThemingProps): JSX.Element => {
                       architecto amet maxime esse inventore, molestias quasi in
                       quis earum repellat repudiandae nobis ipsum.
                     </Text>
-                  </CardBody>
+                  </Card.Body>
                   <CardFooter>
-                    <ButtonGroup spacing="2">
+                    <ButtonGroup gap="2">
                       <Button variant={"outline"}>Buy now</Button>
-                      <Button variant="link" colorScheme="blue">
+                      <Button variant="solid" colorScheme="blue">
                         Add to cart
                       </Button>
                     </ButtonGroup>
                   </CardFooter>
-                </Card>
+                </Card.Root>
               </Box>
             ))}
           </Flex>
@@ -113,7 +111,7 @@ const Theming = ({ slice }: ThemingProps): JSX.Element => {
         </Container>
       </Box>
       <Box bgGradient="linear-gradient(70deg, rgba(224,255,238,1) 15%, rgba(159,225,251,1) 46%, rgba(104,172,255,1) 100%)">
-        <Container py={12} size={[null, "sm", "md", "lg", "xl", "2xl"]}>
+        <Container py={12}>
           <Heading mb={5} textAlign="center" as="h2">
             Three Columns
           </Heading>
@@ -123,11 +121,11 @@ const Theming = ({ slice }: ThemingProps): JSX.Element => {
                 key={id}
                 width={{
                   sm: "calc(50% - 1.5rem * 2/3)",
-                  lg: "calc(33.33333% - 1.5rem * 2/3)", // Used to maintain width when gap is 6 (card width - 2/3 * gap width)
+                  lg: "calc(33.33333% - 1.5rem * 2/3)",
                 }}
               >
-                <Card h="100%">
-                  <CardHeader>
+                <Card.Root h="100%">
+                  <Card.Header>
                     <Image
                       src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
                       width="1770"
@@ -135,8 +133,8 @@ const Theming = ({ slice }: ThemingProps): JSX.Element => {
                       style={{ objectFit: "cover" }}
                       alt="Green double couch with wooden legs"
                     />
-                  </CardHeader>
-                  <CardBody>
+                  </Card.Header>
+                  <Card.Body>
                     <Heading as="h4" size="md" mb={5}>
                       Letter from the President
                     </Heading>
@@ -146,26 +144,26 @@ const Theming = ({ slice }: ThemingProps): JSX.Element => {
                       architecto amet maxime esse inventore, molestias quasi in
                       quis earum repellat repudiandae nobis ipsum.
                     </Text>
-                  </CardBody>
+                  </Card.Body>
                   <CardFooter>
-                    <ButtonGroup spacing="2">
+                    <ButtonGroup gap="2">
                       <Button>Buy now</Button>
-                      <Button variant="link" colorScheme="blue">
+                      <Button variant="solid" colorScheme="blue">
                         Add to cart
                       </Button>
                     </ButtonGroup>
                   </CardFooter>
-                </Card>
+                </Card.Root>
               </Box>
             ))}
             <Box
               width={{
                 sm: "calc(50% - 1.5rem * 2/3)",
-                lg: "calc(33.33333% - 1.5rem * 2/3)", // Used to maintain width when gap is 6 (card width - 2/3 * gap width)
+                lg: "calc(33.33333% - 1.5rem * 2/3)",
               }}
             >
-              <Card h="100%">
-                <CardHeader>
+              <Card.Root h="100%">
+                <Card.Header>
                   <Image
                     src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
                     width="1770"
@@ -173,24 +171,24 @@ const Theming = ({ slice }: ThemingProps): JSX.Element => {
                     style={{ objectFit: "cover" }}
                     alt="Green double couch with wooden legs"
                   />
-                </CardHeader>
-                <CardBody>
+                </Card.Header>
+                <Card.Body>
                   <Heading as="h4" size="md" mb={5}>
                     Letter from the President
                   </Heading>
                   <Text>
                     Lorem ipsum, dolor sit amet consectetur adipisicing elit.
                   </Text>
-                </CardBody>
+                </Card.Body>
                 <CardFooter>
-                  <ButtonGroup spacing="2">
+                  <ButtonGroup gap="2">
                     <Button>Buy now</Button>
-                    <Button variant="link" colorScheme="blue">
+                    <Button variant="solid" colorScheme="blue">
                       Add to cart
                     </Button>
                   </ButtonGroup>
                 </CardFooter>
-              </Card>
+              </Card.Root>
             </Box>
           </Flex>
           <Center mt={"2.5rem"}>
@@ -199,7 +197,7 @@ const Theming = ({ slice }: ThemingProps): JSX.Element => {
         </Container>
       </Box>
       <Box bg={"primary.500"}>
-        <Container py={12} size={[null, "sm", "md", "lg", "xl", "2xl"]}>
+        <Container py={12} >
           <Heading mb={5} textAlign="center" as="h2">
             Four Columns
           </Heading>
@@ -209,11 +207,11 @@ const Theming = ({ slice }: ThemingProps): JSX.Element => {
                 key={id}
                 width={{
                   md: "calc(50% - 1.5rem * 1/2)",
-                  lg: "calc(25% - 1.5rem * 3/4)", // Used to maintain width when gap is 6 (card width - 2/3 * gap width)
+                  lg: "calc(25% - 1.5rem * 3/4)",
                 }}
               >
-                <Card variant={"outlined"}>
-                  <CardHeader>
+                <Card.Root variant={"outline"}>
+                  <Card.Header>
                     <Image
                       src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
                       width="1770"
@@ -221,8 +219,8 @@ const Theming = ({ slice }: ThemingProps): JSX.Element => {
                       style={{ objectFit: "cover" }}
                       alt="Green double couch with wooden legs"
                     />
-                  </CardHeader>
-                  <CardBody>
+                  </Card.Header>
+                  <Card.Body>
                     <Heading as="h4" size="md" mb={5}>
                       Letter from the President
                     </Heading>
@@ -232,16 +230,16 @@ const Theming = ({ slice }: ThemingProps): JSX.Element => {
                       architecto amet maxime esse inventore, molestias quasi in
                       quis earum repellat repudiandae nobis ipsum.
                     </Text>
-                  </CardBody>
+                  </Card.Body>
                   <CardFooter>
-                    <ButtonGroup spacing="2">
+                    <ButtonGroup gap="2">
                       <Button>Buy now</Button>
-                      <Button variant="link" colorScheme="blue">
+                      <Button variant="solid" colorScheme="blue">
                         Add to cart
                       </Button>
                     </ButtonGroup>
                   </CardFooter>
-                </Card>
+                </Card.Root>
               </Box>
             ))}
           </Flex>

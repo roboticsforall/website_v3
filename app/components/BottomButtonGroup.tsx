@@ -26,11 +26,20 @@ export const BottomButtonGroup = ({
           {button_group.map((item, i) => (
             <Button
               key={i}
-              variant={item.button_variation}
-              as={PrismicNextLink}
-              field={item.button_link}
+              variant={
+                (item.button_variation as
+                  | "outline"
+                  | "ghost"
+                  | "solid"
+                  | "subtle"
+                  | "surface"
+                  | "plain") || "solid"
+              }
             >
-              {item.button_text}
+              <PrismicNextLink field={item.button_link}>
+                {item.button_text}
+              </PrismicNextLink>
+              
             </Button>
           ))}
         </Stack>

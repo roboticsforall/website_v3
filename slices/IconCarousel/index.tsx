@@ -1,3 +1,4 @@
+"use client";
 import { Box, Container, Stack } from "@chakra-ui/react";
 import { Content } from "@prismicio/client";
 import { SliceComponentProps } from "@prismicio/react";

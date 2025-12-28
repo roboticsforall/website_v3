@@ -9,7 +9,7 @@ import {
   Center,
   Flex,
   ButtonGroup,
-  Divider,
+  Separator,
   Stack,
 } from "@chakra-ui/react";
 import { Content } from "@prismicio/client";
@@ -69,11 +69,11 @@ const TestimonialNoImage = (slice: Content.TestimonialsSlice): JSX.Element => {
                     }}
                   >
                     <Stack gap="1.25rem">
-                      <Divider borderWidth={1} />
+                      <Separator borderWidth={1} />
                       <Text fontSize="xl" fontStyle={"italic"}>
                         &quot;{item.description} &quot;
                       </Text>
-                      <Divider borderWidth={1} />
+                      <Separator borderWidth={1} />
                       <Text fontSize="lg" fontWeight={"bold"}>
                         {item.name}
                       </Text>
@@ -97,7 +97,7 @@ const TestimonialNoImage = (slice: Content.TestimonialsSlice): JSX.Element => {
                   }}
                   justifyContent={"end"}
                 >
-                  <ButtonGroup spacing="1.25rem">
+                  <ButtonGroup gap="1.25rem">
                     <IconButton
                       aria-label="left-arrow"
                       borderRadius={"50%"}
@@ -116,7 +116,7 @@ const TestimonialNoImage = (slice: Content.TestimonialsSlice): JSX.Element => {
                   </ButtonGroup>
                 </Flex>
               </Center>
-              <HStack justify="center" alignItems="center" mt={4} spacing={2}>
+              <HStack justify="center" align="center" mt={4} gap={2}>
                 {slice.primary.testimonials.map((_, index) => (
                   <Button
                     key={index}

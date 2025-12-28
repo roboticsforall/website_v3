@@ -1,10 +1,11 @@
+//done
 "use client";
-import { Container, Hide, Show } from "@chakra-ui/react";
+import { Container,  Show } from "@chakra-ui/react";
 import { GlobalNavigationDocument } from "@/prismicio-types";
 import { BackgroundColor } from "../BackgroundColor";
 import { MobileNav } from "./MobileNav";
 import { DesktopNav } from "./DesktopNav";
-
+import { Box } from "@chakra-ui/react";
 interface NavbarProps {
   navbar_color?: string;
   navigation: GlobalNavigationDocument<string>;
@@ -14,13 +15,14 @@ export function Navbar({ navbar_color, navigation }: NavbarProps) {
   return (
     <nav style={{ borderBottomColor: "lightgray", borderBottomWidth: 1 }}>
       <BackgroundColor backgroundColor={navbar_color || "white"}>
-        <Container py={3} size={[null, "sm", "md", "lg", "xl", "2xl"]}>
-          <Show above="md">
-            <DesktopNav {...navigation} />
-          </Show>
-          <Hide above="md">
-            <MobileNav {...navigation} />
-          </Hide>
+        <Container py={3} >
+        <Box hideBelow="md">
+          <DesktopNav {...navigation} />
+        </Box>
+
+        <Box hideFrom="md">
+          <MobileNav {...navigation} />
+        </Box>
         </Container>
       </BackgroundColor>
     </nav>
