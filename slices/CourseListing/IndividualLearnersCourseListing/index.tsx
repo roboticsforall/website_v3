@@ -2,12 +2,6 @@
 import { ContainerWrapper } from "@/app/components/ContainerWrapper";
 import { CustomHeading } from "@/app/components/CustomHeading";
 import {
-  ExternalLinkIcon,
-  InfoIcon,
-  StarIcon,
-  WarningIcon,
-} from "@chakra-ui/icons";
-import {
   Accordion,
   Box,
   Checkbox,
@@ -15,7 +9,6 @@ import {
   Text,
   Stack,
   Tag,
-  Slider,
   Grid,
   GridItem,
   CloseButton,
@@ -25,17 +18,17 @@ import {
   Flex,
   IconButton,
   Center,
+  NumberInput,
 } from "@chakra-ui/react";
 import { Content, createClient } from "@prismicio/client";
-import { PrismicNextImage, PrismicNextLink } from "@prismicio/next";
+import { PrismicNextLink } from "@prismicio/next";
 import { PrismicRichText } from "@prismicio/react";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { IFilterOptionType, IFilterType } from "..";
 import { TextBlock } from "@/app/components/TextBlock";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import { forwardRef } from "react";
-const client = createClient("rfa-cms");
 
+const client = createClient("rfa-cms");
 
 const filterOptions: IFilterOptionType = {
   enrollmentStatus: {
@@ -89,14 +82,9 @@ const IndividualLearnersCourseListing = ({
     requiredTechnology: [],
     grade: -1,
   });
-  const [sliderValue, setSliderValue] = useState<number>(-1);
+  const [gradeValue, setGradeValue] = useState<number>(-1);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const marks = [
-  { value: 0, label: "K" },
-  { value: 6, label: "6" },
-  { value: 12, label: "12" },
-  ]
   async function getCourseData() {
     const data = await client.getByUID(
       "course_listing",
@@ -138,24 +126,12 @@ const IndividualLearnersCourseListing = ({
       } else if (typeof updatedFilters[section] === "number") {
         updatedFilters[section] = -1;
         if (section === "grade") {
-          setSliderValue(-1);
+          setGradeValue(-1);
         }
       }
       return updatedFilters;
     });
   }, []);
-
-  const handleSliderChanged = useCallback((value: number) => {
-    setCurrentPage(1);
-    setSliderValue(value);
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      grade: value,
-    }));
-  }, []);
-
-  
-
 
   const filteredData = useMemo(() => {
     if (!data) return [];
@@ -198,19 +174,32 @@ const IndividualLearnersCourseListing = ({
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
+    const handleGradeChange = useCallback((e: { value: string }) => {
+    setCurrentPage(1);
 
-  
+    if (e.value === "") {
+      // empty input = no grade filter
+      setFilters((prev) => ({ ...prev, grade: -1 }));
+      return;
+    }
+
+    setFilters((prev) => ({
+      ...prev,
+      grade: Number(e.value),
+    }));
+  }, []);
+
   if (isLoading)
     return (
       <ContainerWrapper>
         <Stack>
-          <Skeleton height="100px"></Skeleton>
-          <Skeleton height="100px"></Skeleton>
-          <Skeleton height="100px"></Skeleton>
-          <Skeleton height="100px"></Skeleton>
-          <Skeleton height="100px"></Skeleton>
-          <Skeleton height="100px"></Skeleton>
-          <Skeleton height="100px"></Skeleton>
+          <Skeleton height="100px" />
+          <Skeleton height="100px" />
+          <Skeleton height="100px" />
+          <Skeleton height="100px" />
+          <Skeleton height="100px" />
+          <Skeleton height="100px" />
+          <Skeleton height="100px" />
         </Stack>
       </ContainerWrapper>
     );
@@ -238,6 +227,7 @@ const IndividualLearnersCourseListing = ({
                         onClick={() => clearFilter(section)}
                       />
                     </HStack>
+
                     {sectionOptions.checkbox &&
                       sectionOptions.checkbox.map((checkboxInfo) => (
                         <Box key={checkboxInfo.value}>
@@ -258,40 +248,25 @@ const IndividualLearnersCourseListing = ({
                           </Checkbox.Root>
                         </Box>
                       ))}
-                    {sectionOptions.slider && (
+
+                    {section === "grade" && (
                       <HStack gap={2} alignItems="center">
-                        <Slider.Root
-                          aria-label={[sectionOptions.slider.label]}
-                          onValueChange={(e) => handleSliderChanged}                          min={sectionOptions.slider.min}
-                          max={sectionOptions.slider.max}
-                          step={sectionOptions.slider.step}
-                          defaultValue={[sectionOptions.slider.defaultValue]}
-                          value={[sliderValue]}
-                          width={{ base: "100%", md: "60%" }}
-                        >
-                          <Slider.Marks marks={marks} />
-                          <Slider.Track>
-                            <Slider.Range bg="yellow.yellow3" />
-                          </Slider.Track>
-                          <Slider.Thumb index={0} boxSize={6} />
-                        </Slider.Root>
-                        <Box
-                          ml={4}
-                          p={2}
-                          borderWidth={1}
-                          borderRadius="md"
-                          borderColor="gray.200"
-                          width="40px"
-                          textAlign="center"
-                        >
-                          <Text fontSize="sm">
-                            {sliderValue === -1
+                        <NumberInput.Root
+                          min={0}
+                          max={12}
+                          step={1}
+                          clampValueOnBlur={false}
+                          value={
+                            filters.grade === -1
                               ? ""
-                              : sliderValue === 0
-                                ? "K"
-                                : sliderValue}
-                          </Text>
-                        </Box>
+                              : String(filters.grade)
+                          }
+                          onValueChange={handleGradeChange}
+                          width="120px"
+                        >
+                          <NumberInput.Control />
+                          <NumberInput.Input placeholder="K–12" />
+                        </NumberInput.Root>
                       </HStack>
                     )}
                   </Box>
@@ -299,6 +274,7 @@ const IndividualLearnersCourseListing = ({
               })}
             </Stack>
           </GridItem>
+
           <GridItem>
             {/* Pagination Controls */}
             <HStack mb={"1.5rem"} justifyContent="end" gap={4}>
@@ -317,7 +293,6 @@ const IndividualLearnersCourseListing = ({
                 <ChevronLeftIcon color="black" boxSize={6} />
               </IconButton>
 
-              {/* Page Numbers */}
               {Array.from({ length: totalPages }, (_, index) => (
                 <Text
                   key={index}
@@ -325,8 +300,8 @@ const IndividualLearnersCourseListing = ({
                   borderWidth={currentPage === index + 1 ? 2 : "none"}
                   borderRadius={"md"}
                   padding={3}
-                  width={8} // Set a fixed width for square shape
-                  height={8} // Set a fixed height for square shape
+                  width={8}
+                  height={8}
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
@@ -357,18 +332,13 @@ const IndividualLearnersCourseListing = ({
               <Stack mb={"1.25rem"}>
                 {currentCourses.length > 0 ? (
                   currentCourses.map((item) => (
-                    <Accordion.Item value={item.subject} key={item.course_name} borderWidth={1}>
+                    <Accordion.Item
+                      padding={5}
+                      value={item.subject}
+                      key={item.course_name}
+                      borderWidth={1}
+                    >
                       <Accordion.ItemTrigger p={0}>
-                        <Box hideFrom="md">
-                          <Box py={4}>
-                            <PrismicNextImage
-                              width={"150"}
-                              height={"150"}
-                              field={item.image}
-                              style={{ padding: "12px" }}
-                            />
-                          </Box>
-                        </Box>
                         <Stack
                           gap={"1rem"}
                           pl={{ base: 3, md: 0, lg: 0 }}
@@ -385,48 +355,31 @@ const IndividualLearnersCourseListing = ({
                             <Box>
                               {item.open_for_enrollment ? (
                                 <Tag.Root colorScheme="green">
-                                  <Tag.StartElement>
-                                    <StarIcon/>
-                                  </Tag.StartElement>
                                   <Tag.Label>Open for Enrollment!</Tag.Label>
                                 </Tag.Root>
                               ) : (
                                 <Tag.Root colorScheme="yellow">
-                                  <Tag.StartElement>
-                                    <WarningIcon />  
-                                  </Tag.StartElement> 
                                   <Tag.Label>Waitlist Available</Tag.Label>
                                 </Tag.Root>
                               )}
                             </Box>
                             {item.open_for_enrollment ? (
-                              <Button>                              
+                              <Button>
                                 <PrismicNextLink field={item.enroll_link}>
-                                  
-                                Enroll Now!
+                                  Enroll Now!
                                 </PrismicNextLink>
                               </Button>
                             ) : (
-                              <Button>                              
+                              <Button>
                                 <PrismicNextLink field={item.enroll_link}>
-                                  
-                                Join Waitlist!
+                                  Join Waitlist!
                                 </PrismicNextLink>
                               </Button>
                             )}
                           </Flex>
-                          <CustomHeading as="h4">
-                            {item.course_name}
-                          </CustomHeading>
-                          <Flex
-                            flexDirection={{ base: "column", md: "row" }}
-                            alignItems={"start"}
-                            gap={"1rem"}
-                          >
+                          <CustomHeading as="h4">{item.course_name}</CustomHeading>
+                          <Flex flexDirection={{ base: "column", md: "row" }} alignItems={"start"} gap={"1rem"}>
                             <Tag.Root colorScheme="gray">
-                              <Tag.StartElement>
-                                <InfoIcon />
-                              </Tag.StartElement>
                               <Tag.Label>
                                 Grades{" "}
                                 {item.maximum_grade === item.minimum_grade
@@ -434,19 +387,12 @@ const IndividualLearnersCourseListing = ({
                                     ? "K"
                                     : item.minimum_grade
                                   : `${
-                                      item.minimum_grade === 0
-                                        ? "K"
-                                        : item.minimum_grade
+                                      item.minimum_grade === 0 ? "K" : item.minimum_grade
                                     } - ${item.maximum_grade}`}
                               </Tag.Label>
                             </Tag.Root>
                             <Tag.Root colorScheme="gray">
-                              <Tag.StartElement>
-                                <InfoIcon />
-                              </Tag.StartElement>
-                              <Tag.Label>
-                                {item.minimum_technology} Required
-                              </Tag.Label>
+                              <Tag.Label>{item.minimum_technology} Required</Tag.Label>
                             </Tag.Root>
                           </Flex>
                           <PrismicRichText field={item.course_description} />
@@ -469,57 +415,6 @@ const IndividualLearnersCourseListing = ({
                 )}
               </Stack>
             </Accordion.Root>
-            {/* Pagination Controls */}
-            <HStack mb={"1.5rem"} justifyContent="end" gap={4}>
-              <IconButton
- 
-                disabled={currentPage === 1}
-                onClick={() => handlePageChange(currentPage - 1)}
-                aria-label="Previous Page"
-                css={{
-                  backgroundColor: "transparent",
-                  "&:hover": {
-                    backgroundColor: "gray.200",
-                    transition: "background-color 0.3s ease",
-                  },
-                }}
-              >
-                <ChevronLeftIcon color="black" boxSize={6} />
-              </IconButton>
-
-              {/* Page Numbers */}
-              {Array.from({ length: totalPages }, (_, index) => (
-                <Text
-                  key={index}
-                  fontWeight={currentPage === index + 1 ? "bold" : "normal"}
-                  borderWidth={currentPage === index + 1 ? 2 : "none"}
-                  borderRadius={"md"}
-                  padding={3}
-                  width={8} // Set a fixed width for square shape
-                  height={8} // Set a fixed height for square shape
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  cursor="pointer"
-                  onClick={() => handlePageChange(index + 1)}
-                >
-                  {index + 1}
-                </Text>
-              ))}
-
-              <IconButton
-                disabled={currentPage === totalPages}
-                onClick={() => handlePageChange(currentPage + 1)}
-                aria-label="Next Page"
-                css={{
-                  backgroundColor: "transparent",
-                  "&:hover": {
-                    backgroundColor: "gray.200",
-                    transition: "background-color 0.3s ease",
-                  },
-                }}
-              ><ChevronRightIcon color="black" boxSize={6} /></IconButton>
-            </HStack>
           </GridItem>
         </Grid>
       </Stack>
