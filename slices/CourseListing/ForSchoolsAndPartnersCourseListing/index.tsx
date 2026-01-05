@@ -171,13 +171,8 @@ const ForSchoolsAndPartnersCourseListing = ({
   if (!data) return <p>No profile data</p>;
 
   return (
-<<<<<<< Updated upstream
-    <ContainerWrapper>
-      <Stack gap={"2.5rem"}>
-=======
     <ContainerWrapper px={{ base: "4rem", md: "6rem", lg: "8rem" }}>
       <Stack gap="2.5rem">
->>>>>>> Stashed changes
         <Container p={0} textAlign={{ md: "center" }}>
           <TextBlock textBlock={heading_text_block} />
         </Container>
