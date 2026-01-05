@@ -60,7 +60,7 @@ export function Footer({ footer }: FooterProps) {
               <Stack direction="row" gap={"2.5rem"}>
                 {footer.data.social_links.map((item, s) => (
                   
-                    <PrismicNextLink field={item.link}>
+                    <PrismicNextLink key={s} field={item.link}>
                     <PrismicNextImage field={item.icon} />
                     </PrismicNextLink>
                   
