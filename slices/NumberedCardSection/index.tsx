@@ -15,21 +15,23 @@ import { Content } from "@prismicio/client";
 import { PrismicRichText, SliceComponentProps } from "@prismicio/react";
 import { TextBlock } from "@/app/components/TextBlock";
 import { BottomButtonGroup } from "@/app/components/BottomButtonGroup";
-
+/**
+ * Props for `NumberedCardSection`.
+ */
 export type NumberedCardSectionProps =
   SliceComponentProps<Content.NumberedCardSectionSlice>;
-
+/**
+ * Component for "NumberedCardSection" Slices.
+ */
 const NumberedCardSection = ({
   slice,
 }: NumberedCardSectionProps): JSX.Element => {
   return (
     <BackgroundColor backgroundColor={slice.primary.backgroundcolor}>
-      <ContainerWrapper>
-        <VStack gap="2.5rem" align="center" textAlign="center">
-          <Container p={0} maxW="80%" textAlign="center">
-            <Box mx="auto" textAlign="center">
-              <TextBlock textBlock={slice.primary.heading_text_block} />
-            </Box>
+      <ContainerWrapper px={{ base: "4rem", md: "6rem", lg: "8rem" }}>
+        <VStack gap="2.5rem" align="center">
+          <Container p={0} textAlign={{ md: "center" }}>
+            <TextBlock textBlock={slice.primary.heading_text_block} />
           </Container>
           <Flex gap="2.5rem" flexWrap="wrap" justify="center">
             {slice.primary.numbered_cards.map((item, i) => (
@@ -41,7 +43,7 @@ const NumberedCardSection = ({
                   lg: "calc(25% - 2.5rem * 3/4)",
                 }}
               >
-                <Stack justify="center" textAlign="center">
+                <Stack justify="center">
                   <Center
                     w={12}
                     h={12}
@@ -54,13 +56,9 @@ const NumberedCardSection = ({
                       {i + 1}
                     </Text>
                   </Center>
-                  <Stack gap="1.25rem" textAlign="center">
-                    <CustomHeading as="h4" textAlign="center">
-                      {item.card_title}
-                    </CustomHeading>
-                    <Box mx="auto" maxW="80%" textAlign="center">
-                      <PrismicRichText field={item.card_description} />
-                    </Box>
+                  <Stack gap="1.25rem">
+                    <CustomHeading as="h4">{item.card_title}</CustomHeading>
+                    <PrismicRichText field={item.card_description} />
                   </Stack>
                 </Stack>
               </Box>
@@ -72,5 +70,4 @@ const NumberedCardSection = ({
     </BackgroundColor>
   );
 };
-
 export default NumberedCardSection;

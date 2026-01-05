@@ -89,7 +89,7 @@ const Timeline = ({ slice }: TimelineProps): JSX.Element => {
       data-slice-variation={slice.variation}
     >
       <BackgroundColor backgroundColor={slice.primary.background_color}>
-        <ContainerWrapper>
+        <ContainerWrapper px={{ base: "4rem", md: "6rem", lg: "8rem" }}>
           <Flex maxW={"140ch"} justify="center">
             <Stack gap={"2.25rem"}>
               <Container p={0} textAlign={{ md: "center" }}>
@@ -101,7 +101,7 @@ const Timeline = ({ slice }: TimelineProps): JSX.Element => {
                     {isDesktop && i % 2 !== 0 && (
                       <>
                         <MilestoneCard card={card} flex={1} />
-                        <Stack pos="relative" gap={0} mx={"1.5rem"}>
+                        <Stack pos="relative" gap={0} mx={"1.5rem"} right={"2px"}>
                           <Flex justify="center" flex={1}>
                             <Box
                               height="100%"
@@ -131,7 +131,7 @@ const Timeline = ({ slice }: TimelineProps): JSX.Element => {
                                 height="100%"
                                 borderWidth={1}
                                 borderColor={backgroundColorOptions.SECONDARY}
-                              />
+                              /> 
                             )}
                           </Flex>
                         </Stack>
@@ -186,7 +186,7 @@ const Timeline = ({ slice }: TimelineProps): JSX.Element => {
                     {isMobile && (
                       <>
                         <Stack pos="relative" gap={0} mr={"1.5rem"}>
-                          <Flex justify="center" flex={1}>
+                          <Flex justify="center"   flex={1}>
                             {i === 0 ||
                             slice.primary.timeline_cards.length === 1 ? (
                               <Box height="100%" />

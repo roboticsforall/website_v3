@@ -1,7 +1,8 @@
 "use client";
+
 import { ContainerWrapper } from "@/app/components/ContainerWrapper";
 import { CustomHeading } from "@/app/components/CustomHeading";
-import { ChevronLeftIcon, ChevronRightIcon, InfoIcon } from "@chakra-ui/icons";
+import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import {
   Accordion,
   Box,
@@ -10,7 +11,6 @@ import {
   Text,
   Stack,
   Tag,
-  Slider,
   Grid,
   GridItem,
   CloseButton,
@@ -19,9 +19,9 @@ import {
   Flex,
   IconButton,
   Center,
+  NumberInput,
 } from "@chakra-ui/react";
 import { Content, createClient } from "@prismicio/client";
-import { PrismicNextImage } from "@prismicio/next";
 import { PrismicRichText } from "@prismicio/react";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { IFilterOptionType, IFilterType } from "..";
@@ -49,13 +49,6 @@ const filterOptions: IFilterOptionType = {
   },
   grade: {
     filterName: "Grade Level",
-    slider: {
-      label: "Course Grade Level Slider",
-      min: 0,
-      max: 12,
-      step: 1,
-      defaultValue: -1,
-    },
   },
 };
 
@@ -68,13 +61,14 @@ const ForSchoolsAndPartnersCourseListing = ({
   const [data, setData] =
     useState<Content.CourseListingDocument<string> | null>(null);
   const [isLoading, setLoading] = useState(true);
+
   const [filters, setFilters] = useState<IFilterType>({
     enrollmentStatus: [],
     subject: [],
     requiredTechnology: [],
-    grade: -1,
+    grade: -1, // 👈 sentinel stays
   });
-  const [sliderValue, setSliderValue] = useState<number>(-1);
+
   const [currentPage, setCurrentPage] = useState(1);
 
   async function getCourseData() {
@@ -95,73 +89,59 @@ const ForSchoolsAndPartnersCourseListing = ({
 
   const handleCheckboxChange = useCallback((section: string, value: string) => {
     setCurrentPage(1);
-    setFilters((prevFilters) => {
-      const updatedFilters = { ...prevFilters };
-      const sectionFilters = prevFilters[section] as string[];
-      if (sectionFilters.includes(value)) {
-        updatedFilters[section] = sectionFilters.filter(
-          (item) => item !== value
-        );
-      } else {
-        updatedFilters[section] = [...sectionFilters, value];
-      }
-      return updatedFilters;
+    setFilters((prev) => {
+      const updated = { ...prev };
+      const list = prev[section] as string[];
+      updated[section] = list.includes(value)
+        ? list.filter((v) => v !== value)
+        : [...list, value];
+      return updated;
     });
   }, []);
 
   const clearFilter = useCallback((section: string) => {
     setCurrentPage(1);
-    setFilters((prevFilters) => {
-      const updatedFilters = { ...prevFilters };
-      if (Array.isArray(updatedFilters[section])) {
-        updatedFilters[section] = [];
-      } else if (typeof updatedFilters[section] === "number") {
-        updatedFilters[section] = -1;
-        if (section === "grade") {
-          setSliderValue(-1);
-        }
-      }
-      return updatedFilters;
-    });
+    setFilters((prev) => ({
+      ...prev,
+      [section]: section === "grade" ? -1 : [],
+    }));
   }, []);
 
-  const handleSliderChanged = useCallback((value: number) => {
+  const handleGradeChange = useCallback((e: { value: string }) => {
     setCurrentPage(1);
-    setSliderValue(value);
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      grade: value,
+
+    if (e.value === "") {
+      // empty input = no grade filter
+      setFilters((prev) => ({ ...prev, grade: -1 }));
+      return;
+    }
+
+    setFilters((prev) => ({
+      ...prev,
+      grade: Number(e.value),
     }));
   }, []);
 
   const filteredData = useMemo(() => {
     if (!data) return [];
     return data.data.courses.filter((course) => {
-      const enrollmentStatus = filters.enrollmentStatus as string[];
       const grade = filters.grade as number;
       const subject = filters.subject as string[];
       const technology = filters.requiredTechnology as string[];
 
-      const enrollmentStatusFilter =
-        !enrollmentStatus.length ||
-        enrollmentStatus.includes(course.open_for_enrollment.toString());
-
       const gradeFilter =
-        grade == null ||
-        grade == -1 ||
-        (grade >= course.minimum_grade! && grade <= course.maximum_grade!);
+        grade === -1 ||
+        (grade >= course.minimum_grade! &&
+          grade <= course.maximum_grade!);
 
-      const subjectFilter = !subject.length || subject.includes(course.subject);
+      const subjectFilter =
+        !subject.length || subject.includes(course.subject);
 
       const technologyFilter =
-        !technology.length || technology.includes(course.minimum_technology!);
+        !technology.length ||
+        technology.includes(course.minimum_technology!);
 
-      return (
-        enrollmentStatusFilter &&
-        gradeFilter &&
-        subjectFilter &&
-        technologyFilter
-      );
+      return gradeFilter && subjectFilter && technologyFilter;
     });
   }, [data, filters]);
 
@@ -172,37 +152,33 @@ const ForSchoolsAndPartnersCourseListing = ({
     startIndex + ITEMS_PER_PAGE
   );
 
-  const marks = [
-  { value: 0, label: "K" },
-  { value: 6, label: "6" },
-  { value: 12, label: "12" },
-  ]
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-  if (isLoading)
+
+  if (isLoading) {
     return (
       <ContainerWrapper>
         <Stack>
-          <Skeleton height="100px"></Skeleton>
-          <Skeleton height="100px"></Skeleton>
-          <Skeleton height="100px"></Skeleton>
-          <Skeleton height="100px"></Skeleton>
-          <Skeleton height="100px"></Skeleton>
-          <Skeleton height="100px"></Skeleton>
-          <Skeleton height="100px"></Skeleton>
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Skeleton key={i} height="100px" />
+          ))}
         </Stack>
       </ContainerWrapper>
     );
+  }
+
   if (!data) return <p>No profile data</p>;
 
   return (
-    <ContainerWrapper>
-      <Stack gap={"2.5rem"}>
+    <ContainerWrapper px={{ base: "4rem", md: "6rem", lg: "8rem" }}>
+      <Stack gap="2.5rem">
         <Container p={0} textAlign={{ md: "center" }}>
           <TextBlock textBlock={heading_text_block} />
         </Container>
+
         <Grid templateColumns={{ base: "1fr", md: "1fr 2fr" }} gap="1.5rem">
+          {/* FILTERS */}
           <GridItem>
             <Stack py={2}>
               {Object.keys(filterOptions).map((section) => {
@@ -211,68 +187,64 @@ const ForSchoolsAndPartnersCourseListing = ({
                 return (
                   <Box key={section}>
                     <HStack gap={1}>
-                      <Text fontWeight="bold">{sectionOptions.filterName}</Text>
-                      <CloseButton
-                        aria-label={`Clear ${section} Filter`}
-                        onClick={() => clearFilter(section)}
-                      />
+                      <Text fontWeight="bold">
+                        {sectionOptions.filterName}
+                      </Text>
+                      <CloseButton onClick={() => clearFilter(section)} />
                     </HStack>
+
                     {sectionOptions.checkbox &&
                       sectionOptions.checkbox.map((checkboxInfo) => (
                         <Box key={checkboxInfo.value}>
                           <Checkbox.Root
                             value={checkboxInfo.value}
-                            onChange={() =>
-                              handleCheckboxChange(section, checkboxInfo.value)
-                            }
                             checked={(filters[section] as string[]).includes(
                               checkboxInfo.value
                             )}
+                            onCheckedChange={() =>
+                              handleCheckboxChange(
+                                section,
+                                checkboxInfo.value
+                              )
+                            }
                           >
-                           
                             <Checkbox.HiddenInput />
                             <Checkbox.Control>
                               <Checkbox.Indicator />
                             </Checkbox.Control>
-                            <Checkbox.Label>{checkboxInfo.label}</Checkbox.Label>
+                            <Checkbox.Label>
+                              {checkboxInfo.label}
+                            </Checkbox.Label>
                           </Checkbox.Root>
                         </Box>
                       ))}
-                    {sectionOptions.slider && (
-                      <HStack gap={2} alignItems="center">
-                        <Slider.Root
-                          aria-label={[sectionOptions.slider.label]}
-                          onValueChange={(e) => handleSliderChanged}
-                          min={sectionOptions.slider.min}
-                          max={sectionOptions.slider.max}
-                          step={sectionOptions.slider.step}
-                          defaultValue={[sectionOptions.slider.defaultValue]}
-                          value={[sliderValue]}
-                          width={{ base: "100%", md: "60%" }}
-                        >
-                          <Slider.Marks marks={marks} />
-                          <Slider.Track>
-                            <Slider.Range bg="yellow.yellow3" />
-                          </Slider.Track>
-                          <Slider.Thumb index={0} boxSize={6} />
-                        </Slider.Root>
-                        <Box
-                          ml={4}
-                          p={2}
-                          borderWidth={1}
-                          borderRadius="md"
-                          borderColor="gray.200"
-                          width="40px"
-                          textAlign="center"
-                        >
-                          <Text fontSize="sm">
-                            {sliderValue === -1
+
+                    {section === "grade" && (
+                      <HStack mt={2}>
+                        <NumberInput.Root
+                          min={0}
+                          max={12}
+                          step={1}
+                          clampValueOnBlur={false}
+                          value={
+                            filters.grade === -1
                               ? ""
-                              : sliderValue === 0
-                                ? "K"
-                                : sliderValue}
-                          </Text>
-                        </Box>
+                              : String(filters.grade)
+                          }
+                          onValueChange={handleGradeChange}
+                          width="120px"
+                        >
+                          <NumberInput.Control />
+                          <NumberInput.Input placeholder="K–12" />
+                        </NumberInput.Root>
+
+                        <Text fontSize="sm" color="gray.600">
+                          {filters.grade === -1
+                            ? "Any grade"
+                            : filters.grade === 0
+                            ? "K"
+                            : `Grade ${filters.grade}`}
+                        </Text>
                       </HStack>
                     )}
                   </Box>
@@ -280,125 +252,49 @@ const ForSchoolsAndPartnersCourseListing = ({
               })}
             </Stack>
           </GridItem>
+
+          {/* COURSES */}
           <GridItem>
-            {/* Pagination Controls */}
-            <HStack mb={"1.5rem"} gap={4} justifyContent={"end"}>
-              <IconButton
-                disabled={currentPage === 1}
-                onClick={() => handlePageChange(currentPage - 1)}
-                aria-label="Previous Page"
-                css={{
-                  backgroundColor: "transparent",
-                  "&:hover": {
-                    backgroundColor: "gray.200",
-                    transition: "background-color 0.3s ease",
-                  },
-                }}
-              >
-                <ChevronLeftIcon color="black" boxSize={6} />
-              </IconButton>
-
-              {/* Page Numbers */}
-              {Array.from({ length: totalPages }, (_, index) => (
-                <Text
-                  key={index}
-                  fontWeight={currentPage === index + 1 ? "bold" : "normal"}
-                  borderWidth={currentPage === index + 1 ? 2 : "none"}
-                  borderRadius={"md"}
-                  padding={3}
-                  width={8} // Set a fixed width for square shape
-                  height={8} // Set a fixed height for square shape
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  cursor="pointer"
-                  onClick={() => handlePageChange(index + 1)}
-                >
-                  {index + 1}
-                </Text>
-              ))}
-
-              <IconButton
-                disabled={currentPage === totalPages}
-                onClick={() => handlePageChange(currentPage + 1)}
-                aria-label="Next Page"
-                css={{
-                  backgroundColor: "transparent",
-                  "&:hover": {
-                    backgroundColor: "gray.200",
-                    transition: "background-color 0.3s ease",
-                  },
-                }}
-              >
-                <ChevronRightIcon color="black" boxSize={6} />
-              </IconButton>
-            </HStack>
             <Accordion.Root multiple>
-              <Stack mb={"1.25rem"}>
+              <Stack mb="1.25rem">
                 {currentCourses.length > 0 ? (
-                  currentCourses.map((item, index) => (
-                    <Accordion.Item key={item.course_name} value={item.subject} borderWidth={1}>
-                      <Accordion.ItemTrigger p={0}>
-                        <Box hideFrom="md">
-                          <Box py={4}>
-                            <PrismicNextImage
-                              width={"150"}
-                              height={"150"}
-                              field={item.image}
-                              style={{ padding: "12px" }}
-                            />
-                          </Box>
-                        </Box>
-                        <Stack
-                          gap={"1rem"}
-                          pl={{ base: 3, md: 0, lg: 0 }}
-                          py={3}
-                          flex={1}
-                          textAlign={"start"}
-                        >
+                  currentCourses.map((item) => (
+                    <Accordion.Item
+                      key={item.course_name}
+                      value={item.subject}
+                      borderWidth={1}
+                      p={5}
+                    >
+                      <Accordion.ItemTrigger>
+                        <Stack flex={1} textAlign="start">
                           <CustomHeading as="h4">
                             {item.course_name}
                           </CustomHeading>
-                          <Flex
-                            flexDirection={{ base: "column", md: "row" }}
-                            alignItems={"start"}
-                            gap={"1rem"}
-                          >
-                            <Tag.Root colorScheme="gray">
-                              <Tag.StartElement>
-                                <InfoIcon />
-                              </Tag.StartElement>
+                          <Flex gap={2}>
+                            <Tag.Root>
                               <Tag.Label>
-                                Grades{" "}
-                                {item.maximum_grade === item.minimum_grade
-                                  ? item.minimum_grade === 0
-                                    ? "K"
-                                    : item.minimum_grade
-                                  : `${
-                                      item.minimum_grade === 0
-                                        ? "K"
-                                        : item.minimum_grade
-                                    } - ${item.maximum_grade}`}
+                                Grades {item.minimum_grade} –{" "}
+                                {item.maximum_grade}
                               </Tag.Label>
                             </Tag.Root>
-                            <Tag.Root colorScheme="gray">
-                              <Tag.StartElement>
-                                <InfoIcon/>
-                              </Tag.StartElement>
+                            <Tag.Root>
                               <Tag.Label>
                                 {item.minimum_technology} Required
                               </Tag.Label>
                             </Tag.Root>
                           </Flex>
-                          <PrismicRichText field={item.course_description} />
+                          <PrismicRichText
+                            field={item.course_description}
+                          />
                         </Stack>
                         <Accordion.ItemIndicator />
                       </Accordion.ItemTrigger>
-                      <Accordion.ItemContent p={4}>
+
+                      <Accordion.ItemContent>
                         <Accordion.ItemBody>
-                          <Box>
-                            <PrismicRichText field={item.course_syllabi} />
-                          </Box>
+                          <PrismicRichText
+                            field={item.course_syllabi}
+                          />
                         </Accordion.ItemBody>
                       </Accordion.ItemContent>
                     </Accordion.Item>
@@ -410,55 +306,24 @@ const ForSchoolsAndPartnersCourseListing = ({
                 )}
               </Stack>
             </Accordion.Root>
-            {/* Pagination Controls */}
-            <HStack mb={"1.5rem"} justifyContent="end" gap={4}>
+
+            {/* PAGINATION */}
+            <HStack justifyContent="end" gap={4}>
               <IconButton
                 disabled={currentPage === 1}
                 onClick={() => handlePageChange(currentPage - 1)}
                 aria-label="Previous Page"
-                css={{
-                  backgroundColor: "transparent",
-                  "&:hover": {
-                    backgroundColor: "gray.200",
-                    transition: "background-color 0.3s ease",
-                  },
-                }}
               >
-                <ChevronLeftIcon color="black" boxSize={6} />
+                <ChevronLeftIcon />
               </IconButton>
-
-              {/* Page Numbers */}
-              {Array.from({ length: totalPages }, (_, index) => (
-                <Text
-                  key={index}
-                  fontWeight={currentPage === index + 1 ? "bold" : "normal"}
-                  borderWidth={currentPage === index + 1 ? 2 : "none"}
-                  borderRadius={"md"}
-                  padding={3}
-                  width={8} // Set a fixed width for square shape
-                  height={8} // Set a fixed height for square shape
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  cursor="pointer"
-                  onClick={() => handlePageChange(index + 1)}
-                >
-                  {index + 1}
-                </Text>
-              ))}
 
               <IconButton
                 disabled={currentPage === totalPages}
                 onClick={() => handlePageChange(currentPage + 1)}
                 aria-label="Next Page"
-                css={{
-                  backgroundColor: "transparent",
-                  "&:hover": {
-                    backgroundColor: "gray.200",
-                    transition: "background-color 0.3s ease",
-                  },
-                }}
-              ><ChevronRightIcon color="black" boxSize={6} /></IconButton>
+              >
+                <ChevronRightIcon />
+              </IconButton>
             </HStack>
           </GridItem>
         </Grid>

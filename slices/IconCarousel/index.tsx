@@ -7,6 +7,7 @@ import CustomCarousel from "@/app/components/CustomCarousel";
 import { BackgroundColor } from "@/app/components/BackgroundColor";
 import { ContainerWrapper } from "@/app/components/ContainerWrapper";
 import { TextBlock } from "@/app/components/TextBlock";
+import { CustomHeading } from "@/app/components/CustomHeading";
 
 /**
  * Props for `IconCarousel`.
@@ -23,7 +24,7 @@ const IconCarousel = ({ slice }: IconCarouselProps): JSX.Element => {
 
   return (
     <BackgroundColor backgroundColor={slice.primary.backgroundcolor}>
-      <ContainerWrapper>
+      <ContainerWrapper px={{ base: "4rem", md: "6rem", lg: "8rem" }}>
         <Stack gap={"2.5rem"}>
           <Container p={0} textAlign={{ md: "center" }}>
             <TextBlock textBlock={slice.primary.heading_text_block} />

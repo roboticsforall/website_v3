@@ -32,11 +32,13 @@ export function Footer({ footer }: FooterProps) {
             <Stack gap={"2.5rem"}>
               <Flex align="center">
                 <Box width="51px" height="51px">
+
                   <PrismicNextLink href={"/"}>
                     <PrismicNextImage field={footer.data.company_logo} />
                   </PrismicNextLink>
+                    
                 </Box>
-                <CustomHeading as="h4" ml={2} textAlign="left">
+                <CustomHeading as="h4" ml={2}>
                   {footer.data.name}
                 </CustomHeading>
               </Flex>
@@ -52,13 +54,16 @@ export function Footer({ footer }: FooterProps) {
                   <PrismicNextLink field={footer.data.donate_link}>
                     Donate <ExternalLinkIcon ml="1px" />
                   </PrismicNextLink>
+                  
                 </Button>
               </Box>
               <Stack direction="row" gap={"2.5rem"}>
                 {footer.data.social_links.map((item, s) => (
-                  <PrismicNextLink key={s} field={item.link}>
+                  
+                    <PrismicNextLink field={item.link}>
                     <PrismicNextImage field={item.icon} />
-                  </PrismicNextLink>
+                    </PrismicNextLink>
+                  
                 ))}
               </Stack>
             </Stack>
@@ -69,19 +74,15 @@ export function Footer({ footer }: FooterProps) {
                 (navItem, i) =>
                   navItem.variation == "default" && (
                     <Stack key={navItem.primary.name} align={"flex-start"}>
-                      <CustomHeading
-                        as="h5"
-                        mb={4}
-                        textTransform={"uppercase"}
-                        textAlign="left"
-                      >
+                      <CustomHeading as="h5" mb={4} textTransform={"uppercase"}>
                         {navItem.primary.name}
                       </CustomHeading>
                       {navItem.primary.child_navigation.map(
                         (childNavItem, j) => (
-                          <PrismicNextLink key={j} field={childNavItem.link}>
+                          
+                            <PrismicNextLink key={j} field={childNavItem.link}>
                             {childNavItem.name}
-                          </PrismicNextLink>
+                            </PrismicNextLink>
                         )
                       )}
                     </Stack>

@@ -8,7 +8,7 @@ import { TextBlockBottomButtonGroup } from "@/app/components/TextBlockBottomButt
 const LeftImage = (slice: Content.HorizontalSliceSlice): JSX.Element => {
   return (
     <BackgroundColor backgroundColor={slice.primary.background_color!}>
-      <ContainerWrapper>
+      <ContainerWrapper px={{ base: "4rem", md: "6rem", lg: "8rem" }}>
         <SimpleGrid columns={{ md: 2 }} gap="1.5rem" alignItems="center">
           <Box borderRadius="md" overflow="hidden">
             <PrismicNextImage

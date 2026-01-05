@@ -32,7 +32,7 @@ const TeamCardsSection = ({ slice }: TeamCardsSectionProps): JSX.Element => {
         slice.variation === "default" ? slice.primary.backgroundcolor : "white"
       }
     >
-      <ContainerWrapper>
+      <ContainerWrapper px={{ base: "4rem", md: "6rem", lg: "8rem" }}>
         <Box mb={6} color={textColor}>
           <CustomHeading as="h2">{slice.primary.title}</CustomHeading>
         </Box>

@@ -12,43 +12,46 @@ export const CustomHeading = ({
   switch (headingProps.as) {
     case "h1": {
       return (
-        <Heading {...headingProps} size={{ base: "2xl", lg: "3xl" }}>
+        <Heading textAlign={"left"} width={"100%"} {...headingProps} size={{ base: "2xl", lg: "3xl" }}>
           {children}
         </Heading>
       );
     }
     case "h2": {
       return (
-        <Heading {...headingProps} size="xl">
+        // <h2 {...headingProps}>{children}</h2>
+        <Heading fontSize={"30px"}  {...headingProps} size="xl">
           {children}
         </Heading>
       );
     }
     case "h3":
       return (
-        <Heading {...headingProps} size="lg">
+        <Heading textAlign={"left"} width={"100%"} {...headingProps} size="lg">
           {children}
         </Heading>
       );
     case "h4":
       return (
-        <Heading {...headingProps} size="md" textAlign="center">
+        // might have to do textAlign="center"
+        <Heading textAlign={"left"} width={"100%"}{...headingProps} size="md">
           {children}
         </Heading>
       );
     case "h5":
       return (
-        <Heading {...headingProps} size="md">
+        // might have to do textAlign="center"
+        <Heading textAlign={"left"} width={"100%"} {...headingProps} size="md">
           {children}
         </Heading>
       );
     case "h6":
       return (
-        <Heading {...headingProps} size="sm">
+        <Heading textAlign={"left"} width={"100%"} {...headingProps} size="sm">
           {children}
         </Heading>
       );
     default:
-      return <Heading {...headingProps}>{children}</Heading>;
+      return <Heading textAlign={"left"} width={"100%"} {...headingProps}>{children}</Heading>;
   }
 };

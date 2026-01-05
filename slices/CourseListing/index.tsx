@@ -37,6 +37,7 @@ const CourseList = ({ slice }: CourseListingProps): JSX.Element => {
       data-slice-type={slice.slice_type}
       data-slice-variation={slice.variation}
     >
+      
       {slice.variation == "schoolsAndPartners" && (
         <ForSchoolsAndPartnersCourseListing
           heading_text_block={slice.primary.heading_text_block}

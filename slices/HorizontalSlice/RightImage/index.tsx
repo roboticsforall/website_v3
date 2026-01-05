@@ -5,24 +5,21 @@ import { PrismicNextImage } from "@prismicio/next";
 import { BackgroundColor } from "@/app/components/BackgroundColor";
 import { ContainerWrapper } from "@/app/components/ContainerWrapper";
 import { TextBlockBottomButtonGroup } from "@/app/components/TextBlockBottomButtonGroup";
-
 const RightImage = (slice: Content.HorizontalSliceSlice): JSX.Element => {
   return (
     <BackgroundColor backgroundColor={slice.primary.background_color!}>
-      <ContainerWrapper>
+      <ContainerWrapper px={{ base: "4rem", md: "6rem", lg: "8rem" }}>
         <Grid
           templateColumns={{ base: "1fr", md: "1fr 1fr" }}
           templateAreas={{ base: `"image" "content"`, md: `"content image"` }}
           alignItems="center"
           gap="1.5rem"
         >
-          <GridItem gridArea="content" textAlign="left">
-            <Box textAlign="left">
-              <TextBlockBottomButtonGroup
-                textBlock={slice.primary.heading_text_block}
-                button_group={slice.primary.button_group}
-              />
-            </Box>
+          <GridItem gridArea="content">
+            <TextBlockBottomButtonGroup
+              textBlock={slice.primary.heading_text_block}
+              button_group={slice.primary.button_group}
+            />
           </GridItem>
           <GridItem gridArea="image">
             <Box borderRadius="md" overflow="hidden">
@@ -37,5 +34,4 @@ const RightImage = (slice: Content.HorizontalSliceSlice): JSX.Element => {
     </BackgroundColor>
   );
 };
-
 export default RightImage;
