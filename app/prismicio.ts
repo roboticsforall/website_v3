@@ -1,14 +1,14 @@
 import * as prismic from "@prismicio/client";
-import * as prismicNext from "@prismicio/next";
+import { enableAutoPreviews } from "@prismicio/next";
 
-export function createClient({
-  previewData,
-  req,
-  ...config
-}: prismicNext.CreateClientConfig = {}) {
-  const client = prismic.createClient("your-repo-name", config);
+export function createClient(
+  config: prismic.ClientConfig = {}
+) {
+  const client = prismic.createClient("websitev3", config);
 
-  prismicNext.enableAutoPreviews({ client, previewData, req });
+  
+
+  enableAutoPreviews({ client });
 
   return client;
 }
