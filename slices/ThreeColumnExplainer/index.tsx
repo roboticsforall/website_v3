@@ -6,9 +6,15 @@ import { Box, Flex, Grid, Card } from "@chakra-ui/react";
 import { Content } from "@prismicio/client";
 import { SliceComponentProps } from "@prismicio/react";
 
+/**
+ * Props for `ThreeColumnExplainer`.
+ */
 export type ThreeColumnExplainerProps =
   SliceComponentProps<Content.ThreeColumnExplainerSlice>;
 
+/**
+ * Component for "ThreeColumnExplainer" Slices.
+ */
 const ThreeColumnExplainer = ({
   slice,
 }: ThreeColumnExplainerProps): JSX.Element => {
@@ -22,18 +28,19 @@ const ThreeColumnExplainer = ({
           }}
           gap="1.5rem"
         >
+          {/* First Column */}
           <Flex justify="center" align="center">
             <Box
               width={{
                 sm: "100%",
                 lg: "calc(100% - 1.5rem * 2/3)",
               }}
-              textAlign="left"
             >
               <TextBlock textBlock={slice.primary.heading_text_block} />
             </Box>
           </Flex>
 
+          {/* Second Column */}
           <Flex gap="6" flexWrap="wrap" justify="center">
             {slice.primary.multi_column_explainer.map((item, i) => (
               <Box
@@ -43,7 +50,7 @@ const ThreeColumnExplainer = ({
                 key={i}
               >
                 <Card.Root backgroundColor="gray.gray2" height="100%">
-                  <Card.Body textAlign="left">
+                  <Card.Body>
                     <TextBlock textBlock={item.card_text_block} />
                   </Card.Body>
                 </Card.Root>

@@ -15,6 +15,7 @@ export const TextBlockBottomButtonGroup = ({
     <Stack {...stackProps} gap={"2.5rem"}>
       <TextBlock textBlock={textBlock} />
       <BottomButtonGroup {...stackProps} button_group={button_group} />
+    
     </Stack>
   );
 };

@@ -15,34 +15,36 @@ export const TextBlock = ({
   return (
     <>
       {textBlock && asText(textBlock).trim().length != 0 && (
-        <Stack maxW="70ch" {...flexProps} gap={"1.25rem"}>
+        // <Stack maxW="70ch" {...flexProps} gap={"1.25rem"}>
+        <div>
           <PrismicRichText
             field={textBlock}
             components={{
               heading1: ({ children }) => (
-                <CustomHeading as="h1">{children}</CustomHeading>
+                <CustomHeading style={{ marginBottom: "1.25rem" }} as="h1">{children}</CustomHeading>
               ),
               heading2: ({ children }) => (
-                <CustomHeading as="h2">{children}</CustomHeading>
+                <CustomHeading style={{ marginBottom: "1.25rem" }} as="h2">{children}</CustomHeading>
               ),
               heading3: ({ children }) => (
-                <CustomHeading as="h3">{children}</CustomHeading>
+                <CustomHeading style={{ marginBottom: "1.25rem" }} as="h3">{children}</CustomHeading>
               ),
               heading4: ({ children }) => (
-                <CustomHeading as="h4">{children}</CustomHeading>
+                <CustomHeading style={{ marginBottom: "1.25rem" }} as="h4">{children}</CustomHeading>
               ),
               heading5: ({ children }) => (
-                <CustomHeading as="h5">{children}</CustomHeading>
-              ),
+                <CustomHeading style={{ marginBottom: "1.25rem" }} as="h5">{children}</CustomHeading>
+              ),        
               heading6: ({ children }) => (
-                <CustomHeading as="h6">{children}</CustomHeading>
-              ),
+                <CustomHeading style={{ marginBottom: "1.25rem" }} as="h6">{children}</CustomHeading>
+              ),           
               paragraph: ({ children }) => (
-                <Text fontSize="lg">{children}</Text>
+                <Text  fontSize="lg">{children}</Text>
               ),
             }}
           />
-        </Stack>
+        {/* // </Stack> */}
+        </div>
       )}
     </>
   );

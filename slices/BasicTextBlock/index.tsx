@@ -4,7 +4,7 @@ import BlockCenterAligned from "./BlockCenterAligned";
 import BlockLeftAligned from "./BlockLeftAligned";
 
 /**
- * Props for `BasicTextBlock`.
+ * Props for `BasicTextBlock`. sarthak
  */
 export type BasicTextBlockProps =
   SliceComponentProps<Content.BasicTextBlockSlice>;

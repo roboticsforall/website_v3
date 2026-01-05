@@ -17,7 +17,7 @@ export const TopHeadingGroup = ({
   return (
     <>
       {(heading || asText(subheading).trim().length != 0) && (
-        <Flex direction="column" {...flexProps} gap={"1.25rem"} mb={"2.5rem"} textAlign="center">
+        <Flex direction="column" {...flexProps} gap={"1.25rem"} mb={"2.5rem"}>
           {heading && <CustomHeading as="h2">{heading}</CustomHeading>}
           <PrismicRichText field={subheading} />
         </Flex>

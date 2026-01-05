@@ -28,6 +28,7 @@ const Hero = ({ slice }: HeroProps): JSX.Element => {
       data-slice-type={slice.slice_type}
       data-slice-variation={slice.variation}
     >
+      
       {/* Render different components based on slice.variation */}
       {slice.variation === "hero5050LeftAligned" && (
         <Hero5050LeftAligned {...slice} />
